@@ -1,5 +1,6 @@
-using Reqnroll;
 using Microsoft.Playwright;
+using Reqnroll;
+using Reqnroll.BoDi;
 
 namespace PlaywrightDemo.Hooks
 {
@@ -7,11 +8,15 @@ namespace PlaywrightDemo.Hooks
     public sealed class Hooks1
     {
         public static Hooks1 Instance { get; private set; }
-
+        private readonly IObjectContainer _container;
         private IPlaywright _playwright;
         private IBrowserContext _context;
         public IPage Page { get; private set; }
 
+        public Hooks1(IObjectContainer container)
+        {
+            _container = container;
+        }
         [BeforeScenario]
         public async Task Setup()
         {
@@ -62,6 +67,7 @@ namespace PlaywrightDemo.Hooks
                         ["windowState"] = "maximized"
                     }
                 });
+            _container.RegisterInstanceAs<IPage>(Page);
         }
 
 
