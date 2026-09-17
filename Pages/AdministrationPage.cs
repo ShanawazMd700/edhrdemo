@@ -113,7 +113,6 @@ namespace PlaywrightDemo.Pages
             await ScrollToLinesAsync(linename);
             var lineRow = Page.GetProcessRow(linename); 
             await lineRow.ClickAsync();
-            await Page.GetAddButtonBy1("Line Workstations").ClickAsync();
             await AddWorkStationsAsync(ws1, ws2);
             await SaveLinesProcess(linename);
         }
@@ -123,6 +122,7 @@ namespace PlaywrightDemo.Pages
             await WaitAsync();
             foreach (var line in linenames)
             {
+                await Page.ClickAddButtonByAsync("Line Workstations");
                 var stepNameInput = Page.ProcessEditorField(0);
                 await stepNameInput.FillAsync(line);
                 var stepNameInput1 = Page.ProcessEditorField(1);

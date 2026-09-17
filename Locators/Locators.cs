@@ -117,12 +117,29 @@ namespace PlaywrightDemo.Locators
             page.Locator("div.optionbox-group")
             .Filter(new() { Has = page.Locator("div.optionbox-header", new() { HasText = groupName }) })
             .Locator("i.fa-plus-square-o");
-        public static ILocator GetAddButtonBy1(this IPage page, string groupName) =>
-        page.Locator("div.optionbox-header")
-            .GetByText(groupName, new() { Exact = true })
-            .Locator("xpath=../..")
-            .Locator("i.fa-plus-square-o")
-            .Locator(":visible")
-            .First;
+        public static async Task ClickAddButtonByAsync(this IPage page, string groupName)
+        {
+            var handle = await page.EvaluateHandleAsync(@"(groupName) => {
+            const headers = Array.from(document.querySelectorAll('div.optionbox-header'));
+            const header = headers.find(h => h.textContent.trim() === groupName);
+            if (!header) return null;
+
+            // Walk forward through siblings of the header's wrapper div until we find one with the plus icon
+            let sibling = header.parentElement.nextElementSibling;
+            while (sibling) {
+                const icon = sibling.querySelector('i.fa-plus-square-o');
+                if (icon) return icon;
+                sibling = sibling.nextElementSibling;
+            }
+            return null;
+        }", groupName);
+
+                var element = handle.AsElement();
+                if (element == null)
+                {
+                    throw new InvalidOperationException($"Could not find Add button for section '{groupName}'");
+                }
+                await element.ClickAsync();
+        }
     }
 }
