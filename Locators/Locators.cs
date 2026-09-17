@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
+
 namespace PlaywrightDemo.Locators
 {
     public static class Locators
@@ -41,13 +42,12 @@ namespace PlaywrightDemo.Locators
         // Passing an integer index directly (0 for the first plus button, 1 for the second, etc.)
         public static ILocator AddButton(this IPage page, int index) =>
             page.Locator("button:has(i.fa-plus-square-o)").Nth(index);
+        public static ILocator GetPlusButtonByUserGroup(this IPage page, string groupName) =>
+    page.Locator("div.optionbox-group")
+        .Filter(new() { Has = page.Locator("div.optionbox-header", new() { HasText = groupName }) })
+        .Locator("i.fa-plus-square-o");
 
-        public static ILocator EditButton(this IPage page, string sectionText) =>
-            page.Locator($"xpath=//div[contains(@class, 'optionbox-header')][text()='{sectionText}']/ancestor::div[contains(@class, 'tionbox-group')]//button[i[contains(@class, 'fa-pencil-square-o')]]");
-
-        public static ILocator DeleteButton(this IPage page, string sectionText) =>
-            page.Locator($"xpath=//div[contains(@class, 'optionbox-header')][text()='{sectionText}']/ancestor::div[contains(@class, 'tionbox-group')]//button[i[contains(@class, 'fa-trash-can')]]");
-
+       
 
 
         public static ILocator AddButton1(this IPage page, string sectionText) =>
@@ -103,5 +103,26 @@ namespace PlaywrightDemo.Locators
         //fa-solid fa-publish
         public static ILocator Sync(this IPage page, string sectionId) =>
             page.Locator($"#{sectionId} i.fa-solid.fa-rotate");
+        public static ILocator Sync1(this IPage page, string sectionText) =>
+            page.Locator("div.optionbox-group, div.flex-column")
+            .Filter(new() { Has = page.Locator(".optionbox-header", new() { HasText = sectionText }) })
+            .Locator("button:has(i.fa-solid.fa-rotate)");
+
+        public static ILocator GetButtonTab(this IPage page, string tabName) =>
+            page.Locator("button.action-button.button-tab")
+            .Filter(new() { HasText = tabName });
+
+
+        public static ILocator GetAddButtonBy(this IPage page, string groupName) =>
+            page.Locator("div.optionbox-group")
+            .Filter(new() { Has = page.Locator("div.optionbox-header", new() { HasText = groupName }) })
+            .Locator("i.fa-plus-square-o");
+        public static ILocator GetAddButtonBy1(this IPage page, string groupName) =>
+        page.Locator("div.optionbox-header")
+            .GetByText(groupName, new() { Exact = true })
+            .Locator("xpath=../..")
+            .Locator("i.fa-plus-square-o")
+            .Locator(":visible")
+            .First;
     }
 }
