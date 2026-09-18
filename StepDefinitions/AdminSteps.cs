@@ -2,6 +2,7 @@ using PlaywrightDemo.Hooks;
 using PlaywrightDemo.Pages;
 using Reqnroll;
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace PlaywrightDemo.StepDefinitions
@@ -11,7 +12,7 @@ namespace PlaywrightDemo.StepDefinitions
     {
         private readonly AdministrationPage adminPage;
         private readonly Process processPage;
-
+        private string selectedLineName;
         public AdminSteps()
         {
             var page = Hooks1.Instance?.Page;
@@ -66,6 +67,40 @@ namespace PlaywrightDemo.StepDefinitions
         {
             await adminPage.AddWorkStations(ws1, ws2, linename);
         }
+        [When("I select Line {string} and click on Workstation {string}")]
+        public async Task WhenISelectLineAndClickOnWorkstation(string linename, string workstationName)
+        {
+            selectedLineName = linename;
+            await adminPage.SelectWorkStationAsync(linename, workstationName);
+        }
+
+        [When("I add Process Steps {string}, {string}, {string}")]
+        public async Task WhenIAddProcessSteps(string step1, string step2, string step3)
+        {
+            await adminPage.AddProcessStepsAsync(selectedLineName, step1, step2, step3);
+        }
+
+        [When("I add User Group {string}")]
+        public async Task WhenIAddUserGroup(string userGroupName)
+        {
+            await adminPage.AddUserGroupAsync(selectedLineName, userGroupName);
+        }
+
+        [When("I add an Asset with details")]
+        public async Task WhenIAddAnAssetWithDetails(DataTable dataTable)
+        {
+            var row = dataTable.Rows[0];
+
+            await adminPage.AddAssetAsync(
+                selectedLineName,
+                row["AssetName"],
+                row["AssetType"],
+                row["AssetDisplayName"],
+                row["SerialNumber"],
+                bool.Parse(row["DisplayAtWorkstation"]),
+                DateTime.ParseExact(row["ExpirationDate"], "dd-MM-yyyy", CultureInfo.InvariantCulture));
+        }
+
 
     }
 }

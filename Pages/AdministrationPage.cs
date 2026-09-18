@@ -132,5 +132,63 @@ namespace PlaywrightDemo.Pages
 
             }
         }
+        public async Task SelectWorkStationAsync(string linename, string workstationName) // public
+        {
+            await ScrollToLinesAsync(linename);
+            await Page.GetProcessRow(linename).ClickAsync();
+            await WaitAsync();
+
+            await Page.ClickOptionRowAsync("Line Workstations", workstationName);
+            await WaitAsync();
+        }
+
+        public async Task AddProcessStepsAsync(string linename, params string[] stepNames)
+        {
+            foreach (var stepName in stepNames)
+            {
+                await Page.ClickAddButtonByAsync("Process Steps");
+                await Page.ProcessEditorField(0).FillAsync(stepName);
+                await Page.SaveOrCheckButton().ClickAsync();
+                
+            }
+            await SaveLinesProcess(linename); // Save/Publish after each step
+        }
+
+        //public async Task AddUserGroupAsync(string linename, string userGroupName)
+        //{
+        //    await Page.ClickAddButtonByAsync("User Groups");
+        //    await Page.ProcessEditorField(0).FillAsync(userGroupName);
+        //    await Page.SaveOrCheckButton("User Groups").ClickAsync();
+        //    await SaveLinesProcess(linename); // Save/Publish after this addition
+        //}
+        public async Task AddUserGroupAsync(string linename, string userGroupName)
+        {
+            await Page.ClickAddButtonByAsync("User Groups");
+            await Page.ProcessEditorField(0).FillAsync(userGroupName);
+            await Page.SaveOrCheckButton().ClickAsync();
+            await SaveLinesProcess(linename);
+        }
+
+        public async Task AddAssetAsync(
+            string linename,
+            string assetName,
+            string assetType,
+            string assetDisplayName,
+            string serialNumber,
+            bool displayAtWorkstation,
+            DateTime expirationDate)
+        {
+            await Page.ClickAddButtonByAsync("Assets");
+
+            await Page.ProcessEditorField(0).FillAsync(assetName);
+            await Page.ProcessEditorField(1).FillAsync(assetType);
+            await Page.ProcessEditorField(2).FillAsync(assetDisplayName);
+            await Page.ProcessEditorField(3).FillAsync(serialNumber);
+            await Page.ProcessEditorField(4).FillAsync(displayAtWorkstation.ToString().ToLower());
+            await Page.ProcessEditorField(5).FillAsync(expirationDate.ToString("dd-MM-yyyy"));
+
+            await Page.SaveOrCheckButton().ClickAsync();
+            await SaveLinesProcess(linename); // Save/Publish after this addition
+        }
     }
 }

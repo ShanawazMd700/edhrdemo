@@ -12,14 +12,6 @@ namespace PlaywrightDemo.Pages
         public Process(IPage page) : base(page)
         {
         }
-        private async Task SelectProcessAsync(string processName)
-        {
-            await WaitAsync();
-            await ScrollToProcessAsync(processName);
-            var processRow = Page.GetProcessRow(processName);
-            await processRow.ClickAsync();
-        }
-
         private async Task AddProcessStepsAsync(params string[] stepNames)
         {
             await WaitAsync();
@@ -167,6 +159,7 @@ namespace PlaywrightDemo.Pages
             await AddLineDetailsAsync(line1, line2, line3);
             await SaveLines(linename);
         }
+        
 
 
     }

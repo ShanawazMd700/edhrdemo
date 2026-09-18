@@ -80,7 +80,57 @@ namespace PlaywrightDemo.Locators
         // 2. FIXED: Added the missing dot and removed the space here as well
         public static ILocator SaveOrCheckButton(this IPage page) =>
             page.Locator(".fa-solid.fa-check-circle");
+        public static ILocator SaveOrCheckButton(this IPage page, string sectionText) =>
+        page.Locator("div.optionbox-group, div.flex-column")
+        .Filter(new() { Has = page.Locator(".optionbox-header").GetByText(sectionText, new() { Exact = true }) })
+        .Locator(".fa-solid.fa-check-circle")
+        .First;
+        public static async Task ClickSaveOrCheckButtonByAsync(this IPage page, string groupName)
+        {
+            var clicked = await page.EvaluateAsync<bool>(@"(groupName) => {
+        const isVisible = (el) => {
+            const rect = el.getBoundingClientRect();
+            const style = window.getComputedStyle(el);
+            return rect.width > 0 && rect.height > 0 && style.display !== 'none' && style.visibility !== 'hidden';
+        };
 
+        const getRootId = (el) => {
+            let cur = el;
+            while (cur) {
+                if (cur.id) return cur.id;
+                cur = cur.parentElement;
+            }
+            return null;
+        };
+
+        const topLevelTabIds = ['processes', 'userGroups', 'lines', 'validation'];
+
+        const headers = Array.from(document.querySelectorAll('div.optionbox-header'))
+            .filter(h => h.textContent.trim() === groupName)
+            .filter(isVisible)
+            .filter(h => !(topLevelTabIds.includes(getRootId(h)) && getRootId(h).toLowerCase() === groupName.replace(/\s+/g,'').toLowerCase()));
+
+        if (headers.length === 0) return false;
+        const header = headers[headers.length - 1];
+
+        // Search forward through siblings for the check-circle save button
+        let sibling = header.parentElement.nextElementSibling;
+        while (sibling) {
+            const check = sibling.querySelector('.fa-solid.fa-check-circle');
+            if (check && isVisible(check)) {
+                check.closest('button')?.click() ?? check.click();
+                return true;
+            }
+            sibling = sibling.nextElementSibling;
+        }
+        return false;
+    }", groupName);
+
+            if (!clicked)
+            {
+                throw new InvalidOperationException($"Could not find a VISIBLE nested Save button for section '{groupName}'");
+            }
+        }
         public static ILocator CancelButton(this IPage page, string sectionText) =>
             page.Locator("div.btn-group button, button.action-button").Nth(1);
 
@@ -119,27 +169,64 @@ namespace PlaywrightDemo.Locators
             .Locator("i.fa-plus-square-o");
         public static async Task ClickAddButtonByAsync(this IPage page, string groupName)
         {
-            var handle = await page.EvaluateHandleAsync(@"(groupName) => {
-            const headers = Array.from(document.querySelectorAll('div.optionbox-header'));
-            const header = headers.find(h => h.textContent.trim() === groupName);
-            if (!header) return null;
+            var clicked = await page.EvaluateAsync<bool>(@"(groupName) => {
+        const isVisible = (el) => {
+            const rect = el.getBoundingClientRect();
+            const style = window.getComputedStyle(el);
+            return rect.width > 0 && rect.height > 0 && style.display !== 'none' && style.visibility !== 'hidden';
+        };
 
-            // Walk forward through siblings of the header's wrapper div until we find one with the plus icon
-            let sibling = header.parentElement.nextElementSibling;
-            while (sibling) {
-                const icon = sibling.querySelector('i.fa-plus-square-o');
-                if (icon) return icon;
-                sibling = sibling.nextElementSibling;
+        const getRootId = (el) => {
+            let cur = el;
+            while (cur) {
+                if (cur.id) return cur.id;
+                cur = cur.parentElement;
             }
             return null;
-        }", groupName);
+        };
 
-                var element = handle.AsElement();
-                if (element == null)
-                {
-                    throw new InvalidOperationException($"Could not find Add button for section '{groupName}'");
-                }
-                await element.ClickAsync();
+        const headers = Array.from(document.querySelectorAll('div.optionbox-header'))
+            .filter(h => h.textContent.trim() === groupName)
+            .filter(isVisible)
+            // Exclude the top-level tab sections (processes/userGroups/lines/validation) —
+            // we want the NESTED panel under the currently selected item, which lives
+            // inside a different top-level tab (e.g. 'lines') than its own name suggests.
+            .filter(h => getRootId(h) !== groupName.replace(/\s+/g, '').replace(/^./, c => c.toLowerCase()));
+
+        if (headers.length === 0) return false;
+        const header = headers[headers.length - 1];
+
+        let sibling = header.parentElement.nextElementSibling;
+        while (sibling) {
+            const icon = sibling.querySelector('i.fa-plus-square-o');
+            if (icon && isVisible(icon)) {
+                icon.closest('button')?.click() ?? icon.click();
+                return true;
+            }
+            sibling = sibling.nextElementSibling;
+        }
+        return false;
+    }", groupName);
+
+            if (!clicked)
+            {
+                throw new InvalidOperationException($"Could not find a VISIBLE nested Add button for section '{groupName}'");
+            }
+        }
+
+        public static ILocator GetOptionListBySection(this IPage page, string sectionText) =>
+        page.Locator("div.optionbox.backgroundcolor-orange")
+        .Filter(new() { Has = page.Locator("div.optionbox-header").GetByText(sectionText, new() { Exact = true }) })
+        .Locator("xpath=following-sibling::div[contains(@class,'nested-middle') and contains(@class,'optionlist')][1]");
+
+        public static ILocator GetOptionRow(this IPage page, string sectionText, string optionText) =>
+            page.GetOptionListBySection(sectionText)
+                .Locator(".optionbox-option")
+                .GetByText(optionText, new() { Exact = true });
+
+        public static async Task ClickOptionRowAsync(this IPage page, string sectionText, string optionText)
+        {
+            await page.GetOptionRow(sectionText, optionText).ClickAsync();
         }
     }
 }

@@ -25,6 +25,19 @@ Scenario: Creating Lines
 	When I Create line with the name "Line_100"
 
 
-Scenario: Adding WorkStations to the lines 
+Scenario: Adding process steps to the Lines
 	When I navigate to the "Lines" tab
-	And I add WorkStations "WorkStation_100" and "WorkStation_101" to the Line "Line_100"
+	When I select Line "Line_100" and click on Workstation "WorkStation_100"
+	When I add Process Steps "Process_234.Step4", "Process_234.Step5", "Process_234.Step6"
+
+Scenario: Adding Users to the WorkStations
+	When I navigate to the "Lines" tab
+	And I select Line "Line_100" and click on Workstation "WorkStation_100"
+	And I add User Group "UserGroup_100"
+
+Scenario: Adding Assets to the Processes
+	When I navigate to the "Lines" tab
+	When I select Line "Line_100" and click on Workstation "WorkStation_100"
+	When I add an Asset with details
+		| AssetName    | AssetType    | AssetDisplayName | SerialNumber | DisplayAtWorkstation | ExpirationDate |
+		| Asset_100_1  | Sensor       | Asset_100_1       | 1234567890   | true                 | 26-03-2027     |
