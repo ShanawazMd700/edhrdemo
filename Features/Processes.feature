@@ -44,17 +44,6 @@ Scenario: Adding Assets to the Processes
 		| Asset_100_1  | Sensor       | Asset_100_1       | 1234567890   | true                 | 26-03-2027     |
 
 
-Scenario: Adding Processes When All Process Steps Set to True
-	When I add Processes with All Process Steps Set to True
-
-Scenario: Adding Processes When All Process Steps Set to False
-	When I add Processes with All Process Steps Set to False
-
-Scenario: Adding Processes When Three Process Steps Set to True One False
-	When I add Processes when Three Process Steps Set to True One False
-
-Scenario: Adding Processes When One Process Step Set to True Three False
-	When I add Processes When One Process Step Set to True Three False
 
 Scenario Outline: Adding processes When based on the Configuration steps
     When I Create Processes based on the Configuration conditions '<condition>'

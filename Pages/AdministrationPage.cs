@@ -56,6 +56,17 @@ namespace PlaywrightDemo.Pages
             await Page.GetButtonTab("User Groups").ClickAsync();
             await AddUserGroupName(userGroupName);
         }
+
+        public async Task<bool> UserGroupExistsAsync(string userGroupName)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(userGroupName);
+
+            await NavigateToTab("User Groups");
+            await WaitAsync();
+
+            var userGroupRow = Page.GetProcessRow(userGroupName, "User Groups");
+            return await userGroupRow.CountAsync() > 0;
+        }
         private async Task AddUserGroupName(string tabname)
         {
             await Page.GetPlusButtonByUserGroup("User Groups").ClickAsync();
@@ -222,8 +233,11 @@ namespace PlaywrightDemo.Pages
 
             foreach (var userGroup in AdminAccessConfigurationLoader.LoadUserGroups())
             {
-                await AddUsergroup(userGroup.Name);
-                await processPage.AddUsersToUserGroupAsync(userGroup.Name, userGroup.Users);
+                if (!await UserGroupExistsAsync(userGroup.Name))
+                {
+                    await AddUsergroup(userGroup.Name);
+                    await processPage.AddUsersToUserGroupAsync(userGroup.Name, userGroup.Users);
+                }
             }
 
             await NavigateToTab("Lines");

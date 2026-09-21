@@ -522,7 +522,7 @@
         "lineName": "Test_Line4",
         "displayName": "Test_Line4",
         "loginTimeoutInSec": 900,
-        "watsLocation": "0",
+        "watsLocation": "900",
         "workstations": [
           {
             "workstationId": "Test_Line_Workstation1",

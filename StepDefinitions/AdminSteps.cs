@@ -101,29 +101,6 @@ namespace PlaywrightDemo.StepDefinitions
                 DateTime.ParseExact(row["ExpirationDate"], "dd-MM-yyyy", CultureInfo.InvariantCulture));
         }
 
-        [When("I add Processes with All Process Steps Set to True")]
-        public async Task WhenIAddProcessesWithAllProcessStepsSetToTrue()
-        {
-            await adminPage.CreateConfigurationAsync("AllProcessStepsSettoTrue");
-        }
-
-        [When("I add Processes with All Process Steps Set to False")]
-        public async Task WhenIAddProcessesWithAllProcessStepsSetToFalse()
-        {
-            await adminPage.CreateConfigurationAsync("AllProcessStepsSettoFalse");
-        }
-
-        [When("I add Processes when Three Process Steps Set to True One False")]
-        public async Task WhenIAddProcessesWhenThreeProcessStepsSetToTrueOneFalse()
-        {
-            await adminPage.CreateConfigurationAsync("ThreeProcessStepsSettoTrueOneFalse");
-        }
-
-        [When("I add Processes When One Process Step Set to True Three False")]
-        public async Task WhenIAddProcessesWhenOneProcessStepSetToTrueThreeFalse()
-        {
-            await adminPage.CreateConfigurationAsync("OneProcessStepSettoTrueThreeFalse");
-        }
 
         private string GetSelectedLineName() =>
             !string.IsNullOrWhiteSpace(selectedLineName)
