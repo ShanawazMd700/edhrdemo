@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
+using System.Globalization;
 using Microsoft.Playwright;
 using PlaywrightDemo.Locators;
+using PlaywrightDemo.Support;
 
 namespace PlaywrightDemo.Pages
 {
@@ -36,16 +38,16 @@ namespace PlaywrightDemo.Pages
             await OpenProcessActionsAndPublishAsync(processName);
         }
 
-        private async Task OpenProcessActionsAndSaveAsync(string processName)
+        private async Task OpenProcessActionsAndSaveAsync(string processName, string sectionText = "Processes")
         {
-            await Page.GetProcessRowActionButton(processName).ClickAsync();
+            await Page.GetProcessRowActionButton(processName, sectionText).ClickAsync();
             await Page.GetElementByText("Save").ClickAsync();
             await WaitAsync();
         }
 
-        private async Task OpenProcessActionsAndPublishAsync(string processName)
+        private async Task OpenProcessActionsAndPublishAsync(string processName, string sectionText = "Processes")
         {
-            await Page.GetProcessRowActionButton(processName).ClickAsync();
+            await Page.GetProcessRowActionButton(processName, sectionText).ClickAsync();
             await WaitAsync();
             await Page.ClickElementWithTextAsync("Publish");
         }
@@ -60,8 +62,8 @@ namespace PlaywrightDemo.Pages
             await Page.ProcessEditorField(0).FillAsync(tabname);
             await Page.SaveOrCheckButton().ClickAsync();
             await ScrollToUserGroupsAsync1(tabname);
-            await OpenProcessActionsAndSaveAsync(tabname);
-            await OpenProcessActionsAndPublishAsync(tabname);
+            await OpenProcessActionsAndSaveAsync(tabname, "User Groups");
+            await OpenProcessActionsAndPublishAsync(tabname, "User Groups");
             await WaitAsync();
         }
         public async Task NavigateToTab(string tabName)
@@ -70,18 +72,21 @@ namespace PlaywrightDemo.Pages
         }
         private async Task SaveLinesProcess(string processName)
         {
-            var actionButton = Page.GetProcessRowActionButton(processName);
+            var actionButton = Page.GetProcessRowActionButton(processName, "Lines");
             await actionButton.ClickAsync();
             var savebutton = Page.GetElementByText("Save");
             await savebutton.ClickAsync();
             await WaitAsync();
-            var actionButton1 = Page.GetProcessRowActionButton(processName);
+            var actionButton1 = Page.GetProcessRowActionButton(processName, "Lines");
             await actionButton1.ClickAsync();
             await WaitAsync();
             Page.ClickElementWithTextAsync("Publish").Wait();
             await Page.Sync1("Lines").ClickAsync();
         }
-        public async Task AddLinesAsync( string linename)
+        public Task AddLinesAsync(string lineName) =>
+            AddLinesAsync(lineName, lineName, 88, "1100");
+
+        public async Task AddLinesAsync(string lineName, string displayName, int loginTimeoutInSeconds, string watsLocation)
         {
             await WaitAsync();
 
@@ -89,44 +94,55 @@ namespace PlaywrightDemo.Pages
                 await addButton.ClickAsync();
 
                 var stepNameInput = Page.ProcessEditorField(0);
-                await stepNameInput.FillAsync(linename);
+                await stepNameInput.FillAsync(lineName);
 
                 var stepNameInput1 = Page.ProcessEditorField(1);
-                await stepNameInput1.FillAsync(linename);
+                await stepNameInput1.FillAsync(displayName);
 
                 var stepNameInput2 = Page.ProcessEditorField(2);
-                await stepNameInput2.FillAsync("88");
+                await stepNameInput2.FillAsync(loginTimeoutInSeconds.ToString());
 
                 var stepNameInput3 = Page.ProcessEditorField(3);
-                await stepNameInput3.FillAsync("1100");
+                await stepNameInput3.FillAsync(watsLocation);
 
                 var saveButton = Page.SaveOrCheckButton();
                 await saveButton.ClickAsync();
-                await ScrollToLinesAsync(linename);
-                await SaveLinesProcess(linename);
+                await ScrollToLinesAsync(lineName);
+                await SaveLinesProcess(lineName);
 
         }
 
-        public async Task AddWorkStations(string ws1, string ws2, string linename)
+        public async Task AddWorkStations(string lineName, params string[] workstationNames)
+        {
+            await AddWorkStations(
+                lineName,
+                workstationNames.Select(workstationName => new WorkstationDefinition
+                {
+                    Id = workstationName,
+                    Name = workstationName
+                }));
+        }
+
+        public async Task AddWorkStations(string lineName, IEnumerable<WorkstationDefinition> workstations)
         {
             await WaitAsync();
-            await ScrollToLinesAsync(linename);
-            var lineRow = Page.GetProcessRow(linename); 
+            await ScrollToLinesAsync(lineName);
+            var lineRow = Page.GetProcessRow(lineName, "Lines"); 
             await lineRow.ClickAsync();
-            await AddWorkStationsAsync(ws1, ws2);
-            await SaveLinesProcess(linename);
+            await AddWorkStationsAsync(workstations);
+            await SaveLinesProcess(lineName);
         }
 
-        private async Task AddWorkStationsAsync(params string[] linenames)
+        private async Task AddWorkStationsAsync(IEnumerable<WorkstationDefinition> workstations)
         {
             await WaitAsync();
-            foreach (var line in linenames)
+            foreach (var workstation in workstations)
             {
                 await Page.ClickAddButtonByAsync("Line Workstations");
                 var stepNameInput = Page.ProcessEditorField(0);
-                await stepNameInput.FillAsync(line);
+                await stepNameInput.FillAsync(workstation.Id);
                 var stepNameInput1 = Page.ProcessEditorField(1);
-                await stepNameInput1.FillAsync(line);
+                await stepNameInput1.FillAsync(workstation.Name);
                 var saveButton = Page.SaveOrCheckButton();
                 await saveButton.ClickAsync();
 
@@ -135,9 +151,12 @@ namespace PlaywrightDemo.Pages
         public async Task SelectWorkStationAsync(string linename, string workstationName) // public
         {
             await ScrollToLinesAsync(linename);
-            await Page.GetProcessRow(linename).ClickAsync();
+            await Page.GetProcessRow(linename, "Lines").ClickAsync();
             await WaitAsync();
-
+            await Page.GetProcessRow(linename, "Lines").ClickAsync();
+            await WaitAsync();
+            await Page.GetProcessRow(linename, "Lines").ClickAsync();
+            await WaitAsync();
             await Page.ClickOptionRowAsync("Line Workstations", workstationName);
             await WaitAsync();
         }
@@ -189,6 +208,59 @@ namespace PlaywrightDemo.Pages
 
             await Page.SaveOrCheckButton().ClickAsync();
             await SaveLinesProcess(linename); // Save/Publish after this addition
+        }
+
+        public async Task CreateConfigurationAsync(string configurationName)
+        {
+            var configuration = AdminAccessConfigurationLoader.LoadProcessConfiguration(configurationName);
+            var process = configuration.ProcessCreation;
+            var line = configuration.LineCreation;
+            var processPage = new Process(Page);
+
+            await ClickAddProcessAsync(process.Name, process.DisplayName);
+            await processPage.CreateProcessStepsAsync(process.Name, process.Steps);
+
+            foreach (var userGroup in AdminAccessConfigurationLoader.LoadUserGroups())
+            {
+                await AddUsergroup(userGroup.Name);
+                await processPage.AddUsersToUserGroupAsync(userGroup.Name, userGroup.Users);
+            }
+
+            await NavigateToTab("Lines");
+            await AddLinesAsync(
+                line.Name,
+                line.DisplayName,
+                line.LoginTimeoutInSeconds,
+                line.WatsLocation);
+            await AddWorkStations(line.Name, line.Workstations);
+
+            foreach (var workstation in line.Workstations)
+            {
+                if (workstation.ProcessStepNames.Count > 0)
+                {
+                    await SelectWorkStationAsync(line.Name, workstation.Name);
+                    await AddProcessStepsAsync(line.Name, workstation.ProcessStepNames.ToArray());
+                }
+
+                foreach (var userGroup in workstation.UserGroups)
+                {
+                    await SelectWorkStationAsync(line.Name, workstation.Name);
+                    await AddUserGroupAsync(line.Name, userGroup);
+                }
+
+                foreach (var asset in workstation.Assets)
+                {
+                    await SelectWorkStationAsync(line.Name, workstation.Name);
+                    await AddAssetAsync(
+                        line.Name,
+                        asset.Name,
+                        asset.Type,
+                        asset.DisplayName,
+                        asset.SerialNumber,
+                        asset.DisplayAtWorkstation,
+                        DateTime.ParseExact(asset.ExpirationDate, "dd-MM-yyyy", CultureInfo.InvariantCulture));
+                }
+            }
         }
     }
 }

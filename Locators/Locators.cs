@@ -16,11 +16,28 @@ namespace PlaywrightDemo.Locators
         public static ILocator GetProcessRow(this IPage page, string processName) =>
             page.Locator("div.optionbox-option.optionbox-content")
                 .Filter(new() { HasText = processName });
+
+        public static ILocator GetProcessRow(this IPage page, string processName, string sectionText)
+        {
+            ArgumentNullException.ThrowIfNull(page);
+            ArgumentException.ThrowIfNullOrWhiteSpace(processName);
+            ArgumentException.ThrowIfNullOrWhiteSpace(sectionText);
+
+            return page.Locator("div.flex-column, div.optionbox-group")
+                .Filter(new() { Has = page.Locator(".optionbox-header").GetByText(sectionText, new() { Exact = true }) })
+                .Locator(".nested-middle.optionlist.optionbox, .optionbox-content.optionlist")
+                .Locator("div.optionbox-option.optionbox-content")
+                .Filter(new() { Has = page.GetByText(processName, new() { Exact = true }) });
+        }
         public static ILocator ClickProcess(this IPage page, string processName) =>
             (ILocator)page.GetProcessRow(processName).ClickAsync();
         // Locates the specific action button (usually the triple-dot/ellipsis) inside that row
         public static ILocator GetProcessRowActionButton(this IPage page, string processName) =>
             page.GetProcessRow(processName)
+                .Locator("button");
+
+        public static ILocator GetProcessRowActionButton(this IPage page, string processName, string sectionText) =>
+            page.GetProcessRow(processName, sectionText)
                 .Locator("button");
         
 
@@ -226,7 +243,9 @@ namespace PlaywrightDemo.Locators
 
         public static async Task ClickOptionRowAsync(this IPage page, string sectionText, string optionText)
         {
+            
             await page.GetOptionRow(sectionText, optionText).ClickAsync();
+
         }
     }
 }

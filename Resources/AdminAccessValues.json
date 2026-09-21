@@ -1,0 +1,658 @@
+{
+  "Processes": {
+    "AllProcessStepsSettoTrue": {
+      "ProcessesCreation": {
+        "processName": "Test_Process1",
+        "processDisplayName": "Test_Process1",
+        "processSteps": [
+          {
+            "stepName": "Test_Process1_Step1",
+            "stepDisplayName": "Test_Process1_Step1",
+            "isOptional": true,
+            "isDhrStep": true,
+            "watsProcessCode": 1
+          },
+          {
+            "stepName": "Test_Process1_Step2",
+            "stepDisplayName": "Test_Process1_Step2",
+            "isOptional": true,
+            "isDhrStep": true,
+            "watsProcessCode": 1
+          },
+          {
+            "stepName": "Test_Process1_Step3",
+            "stepDisplayName": "Test_Process1_Step3",
+            "isOptional": true,
+            "isDhrStep": true,
+            "watsProcessCode": 1
+          },
+          {
+            "stepName": "Test_Process1_Step4",
+            "stepDisplayName": "Test_Process1_Step4",
+            "isOptional": true,
+            "isDhrStep": true,
+            "watsProcessCode": 1
+          }
+        ]
+      },
+      "LineCreation": {
+        "lineName": "Test_Line1",
+        "displayName": "Test_Line1",
+        "loginTimeoutInSec": 900,
+        "watsLocation": "900",
+        "workstations": [
+          {
+            "workstationId": "Test_Line_Workstation1",
+            "workstationName": "Test_Line_Workstation1",
+            "processStepNames": [
+              "Test_Process1_Step1"
+            ],
+            "userGroups": [
+              "Test_User_Group"
+            ],
+            "users": [],
+            "assets": [
+              {
+                "assetName": "Test_Line_Workstation1_Asset1",
+                "type": "Test_Line_Workstation1_Asset1",
+                "assetDisplayName": "Test_Line_Workstation1_Asset1",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              },
+              {
+                "assetName": "Test_Line_Workstation1_Asset2",
+                "type": "Test_Line_Workstation1_Asset2",
+                "assetDisplayName": "Test_Line_Workstation1_Asset2",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              }
+            ]
+          },
+          {
+            "workstationId": "Test_Line_Workstation2",
+            "workstationName": "Test_Line_Workstation2",
+            "processStepNames": [
+              "Test_Process1_Step2"
+            ],
+            "userGroups": [
+              "Test_User_Group"
+            ],
+            "users": [],
+            "assets": [
+              {
+                "assetName": "Test_Line_Workstation2_Asset1",
+                "type": "Test_Line_Workstation2_Asset1",
+                "assetDisplayName": "Test_Line_Workstation2_Asset1",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              },
+              {
+                "assetName": "Test_Line_Workstation2_Asset2",
+                "type": "Test_Line_Workstation2_Asset2",
+                "assetDisplayName": "Test_Line_Workstation2_Asset2",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              }
+            ]
+          },
+          {
+            "workstationId": "Test_Line_Workstation3",
+            "workstationName": "Test_Line_Workstation3",
+            "processStepNames": [
+              "Test_Process1_Step3"
+            ],
+            "userGroups": [
+              "Test_User_Group"
+            ],
+            "users": [],
+            "assets": [
+              {
+                "assetName": "Test_Line_Workstation3_Asset1",
+                "type": "Test_Line_Workstation3_Asset1",
+                "assetDisplayName": "Test_Line_Workstation3_Asset1",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              },
+              {
+                "assetName": "Test_Line_Workstation3_Asset2",
+                "type": "Test_Line_Workstation3_Asset2",
+                "assetDisplayName": "Test_Line_Workstation3_Asset2",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              }
+            ]
+          },
+          {
+            "workstationId": "Test_Line_Workstation4",
+            "workstationName": "Test_Line_Workstation4",
+            "processStepNames": [
+              "Test_Process1_Step4"
+            ],
+            "userGroups": [
+              "Test_User_Group"
+            ],
+            "users": [],
+            "assets": [
+              {
+                "assetName": "Test_Line_Workstation4_Asset1",
+                "type": "Test_Line_Workstation4_Asset1",
+                "assetDisplayName": "Test_Line_Workstation4_Asset1",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              },
+              {
+                "assetName": "Test_Line_Workstation4_Asset2",
+                "type": "Test_Line_Workstation4_Asset2",
+                "assetDisplayName": "Test_Line_Workstation4_Asset2",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              }
+            ]
+          }
+        ]
+      }
+    },
+
+    "AllProcessStepsSettoFalse": {
+      "ProcessesCreation": {
+        "processName": "Test_Process2",
+        "processDisplayName": "Test_Process2",
+        "processSteps": [
+          {
+            "stepName": "Test_Process2_Step1",
+            "stepDisplayName": "Test_Process2_Step1",
+            "isOptional": true,
+            "isDhrStep": false,
+            "watsProcessCode": 1
+          },
+          {
+            "stepName": "Test_Process2_Step2",
+            "stepDisplayName": "Test_Process2_Step2",
+            "isOptional": true,
+            "isDhrStep": false,
+            "watsProcessCode": 1
+          },
+          {
+            "stepName": "Test_Process2_Step3",
+            "stepDisplayName": "Test_Process2_Step3",
+            "isOptional": true,
+            "isDhrStep": false,
+            "watsProcessCode": 1
+          },
+          {
+            "stepName": "Test_Process2_Step4",
+            "stepDisplayName": "Test_Process2_Step4",
+            "isOptional": true,
+            "isDhrStep": false,
+            "watsProcessCode": 1
+          }
+        ]
+      },
+      "LineCreation": {
+        "lineName": "Test_Line2",
+        "displayName": "Test_Line2",
+        "loginTimeoutInSec": 900,
+        "watsLocation": "900",
+        "workstations": [
+          {
+            "workstationId": "Test_Line_Workstation1",
+            "workstationName": "Test_Line_Workstation1",
+            "processStepNames": [
+              "Test_Process2_Step1"
+            ],
+            "userGroups": [
+              "Test_User_Group"
+            ],
+            "users": [],
+            "assets": [
+              {
+                "assetName": "Test_Line_Workstation1_Asset1",
+                "type": "Test_Line_Workstation1_Asset1",
+                "assetDisplayName": "Test_Line_Workstation1_Asset1",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              },
+              {
+                "assetName": "Test_Line_Workstation1_Asset2",
+                "type": "Test_Line_Workstation1_Asset2",
+                "assetDisplayName": "Test_Line_Workstation1_Asset2",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              }
+            ]
+          },
+          {
+            "workstationId": "Test_Line_Workstation2",
+            "workstationName": "Test_Line_Workstation2",
+            "processStepNames": [
+              "Test_Process2_Step2"
+            ],
+            "userGroups": [
+              "Test_User_Group"
+            ],
+            "users": [],
+            "assets": [
+              {
+                "assetName": "Test_Line_Workstation2_Asset1",
+                "type": "Test_Line_Workstation2_Asset1",
+                "assetDisplayName": "Test_Line_Workstation2_Asset1",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              },
+              {
+                "assetName": "Test_Line_Workstation2_Asset2",
+                "type": "Test_Line_Workstation2_Asset2",
+                "assetDisplayName": "Test_Line_Workstation2_Asset2",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              }
+            ]
+          },
+          {
+            "workstationId": "Test_Line_Workstation3",
+            "workstationName": "Test_Line_Workstation3",
+            "processStepNames": [
+              "Test_Process2_Step3"
+            ],
+            "userGroups": [
+              "Test_User_Group"
+            ],
+            "users": [],
+            "assets": [
+              {
+                "assetName": "Test_Line_Workstation3_Asset1",
+                "type": "Test_Line_Workstation3_Asset1",
+                "assetDisplayName": "Test_Line_Workstation3_Asset1",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              },
+              {
+                "assetName": "Test_Line_Workstation3_Asset2",
+                "type": "Test_Line_Workstation3_Asset2",
+                "assetDisplayName": "Test_Line_Workstation3_Asset2",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              }
+            ]
+          },
+          {
+            "workstationId": "Test_Line_Workstation4",
+            "workstationName": "Test_Line_Workstation4",
+            "processStepNames": [
+              "Test_Process2_Step4"
+            ],
+            "userGroups": [
+              "Test_User_Group"
+            ],
+            "users": [],
+            "assets": [
+              {
+                "assetName": "Test_Line_Workstation4_Asset1",
+                "type": "Test_Line_Workstation4_Asset1",
+                "assetDisplayName": "Test_Line_Workstation4_Asset1",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              },
+              {
+                "assetName": "Test_Line_Workstation4_Asset2",
+                "type": "Test_Line_Workstation4_Asset2",
+                "assetDisplayName": "Test_Line_Workstation4_Asset2",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              }
+            ]
+          }
+        ]
+      }
+    },
+
+    "ThreeProcessStepsSettoTrueOneFalse": {
+      "ProcessesCreation": {
+        "processName": "Test_Process3",
+        "processDisplayName": "Test_Process3",
+        "processSteps": [
+          {
+            "stepName": "Test_Process3_Step1",
+            "stepDisplayName": "Test_Process3_Step1",
+            "isOptional": true,
+            "isDhrStep": true,
+            "watsProcessCode": 1
+          },
+          {
+            "stepName": "Test_Process3_Step2",
+            "stepDisplayName": "Test_Process3_Step2",
+            "isOptional": true,
+            "isDhrStep": true,
+            "watsProcessCode": 1
+          },
+          {
+            "stepName": "Test_Process3_Step3",
+            "stepDisplayName": "Test_Process3_Step3",
+            "isOptional": true,
+            "isDhrStep": true,
+            "watsProcessCode": 1
+          },
+          {
+            "stepName": "Test_Process3_Step4",
+            "stepDisplayName": "Test_Process3_Step4",
+            "isOptional": true,
+            "isDhrStep": false,
+            "watsProcessCode": 1
+          }
+        ]
+      },
+      "LineCreation": {
+        "lineName": "Test_Line3",
+        "displayName": "Test_Line3",
+        "loginTimeoutInSec": 900,
+        "watsLocation": "900",
+        "workstations": [
+          {
+            "workstationId": "Test_Line_Workstation1",
+            "workstationName": "Test_Line_Workstation1",
+            "processStepNames": [
+              "Test_Process3_Step1"
+            ],
+            "userGroups": [
+              "Test_User_Group"
+            ],
+            "users": [],
+            "assets": [
+              {
+                "assetName": "Test_Line_Workstation1_Asset1",
+                "type": "Test_Line_Workstation1_Asset1",
+                "assetDisplayName": "Test_Line_Workstation1_Asset1",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              },
+              {
+                "assetName": "Test_Line_Workstation1_Asset2",
+                "type": "Test_Line_Workstation1_Asset2",
+                "assetDisplayName": "Test_Line_Workstation1_Asset2",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              }
+            ]
+          },
+          {
+            "workstationId": "Test_Line_Workstation2",
+            "workstationName": "Test_Line_Workstation2",
+            "processStepNames": [
+              "Test_Process3_Step2"
+            ],
+            "userGroups": [
+              "Test_User_Group"
+            ],
+            "users": [],
+            "assets": [
+              {
+                "assetName": "Test_Line_Workstation2_Asset1",
+                "type": "Test_Line_Workstation2_Asset1",
+                "assetDisplayName": "Test_Line_Workstation2_Asset1",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              },
+              {
+                "assetName": "Test_Line_Workstation2_Asset2",
+                "type": "Test_Line_Workstation2_Asset2",
+                "assetDisplayName": "Test_Line_Workstation2_Asset2",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              }
+            ]
+          },
+          {
+            "workstationId": "Test_Line_Workstation3",
+            "workstationName": "Test_Line_Workstation3",
+            "processStepNames": [
+              "Test_Process3_Step3"
+            ],
+            "userGroups": [
+              "Test_User_Group"
+            ],
+            "users": [],
+            "assets": [
+              {
+                "assetName": "Test_Line_Workstation3_Asset1",
+                "type": "Test_Line_Workstation3_Asset1",
+                "assetDisplayName": "Test_Line_Workstation3_Asset1",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              },
+              {
+                "assetName": "Test_Line_Workstation3_Asset2",
+                "type": "Test_Line_Workstation3_Asset2",
+                "assetDisplayName": "Test_Line_Workstation3_Asset2",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              }
+            ]
+          },
+          {
+            "workstationId": "Test_Line_Workstation4",
+            "workstationName": "Test_Line_Workstation4",
+            "processStepNames": [
+              "Test_Process3_Step4"
+            ],
+            "userGroups": [
+              "Test_User_Group"
+            ],
+            "users": [],
+            "assets": [
+              {
+                "assetName": "Test_Line_Workstation4_Asset1",
+                "type": "Test_Line_Workstation4_Asset1",
+                "assetDisplayName": "Test_Line_Workstation4_Asset1",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              },
+              {
+                "assetName": "Test_Line_Workstation4_Asset2",
+                "type": "Test_Line_Workstation4_Asset2",
+                "assetDisplayName": "Test_Line_Workstation4_Asset2",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              }
+            ]
+          }
+        ]
+      }
+    },
+
+    "OneProcessStepSettoTrueThreeFalse": {
+      "ProcessesCreation": {
+        "processName": "Test_Process4",
+        "processDisplayName": "Test_Process4",
+        "processSteps": [
+          {
+            "stepName": "Test_Process4_Step1",
+            "stepDisplayName": "Test_Process4_Step1",
+            "isOptional": true,
+            "isDhrStep": true,
+            "watsProcessCode": 1
+          },
+          {
+            "stepName": "Test_Process4_Step2",
+            "stepDisplayName": "Test_Process4_Step2",
+            "isOptional": true,
+            "isDhrStep": false,
+            "watsProcessCode": 1
+          },
+          {
+            "stepName": "Test_Process4_Step3",
+            "stepDisplayName": "Test_Process4_Step3",
+            "isOptional": true,
+            "isDhrStep": false,
+            "watsProcessCode": 1
+          },
+          {
+            "stepName": "Test_Process4_Step4",
+            "stepDisplayName": "Test_Process4_Step4",
+            "isOptional": true,
+            "isDhrStep": false,
+            "watsProcessCode": 1
+          }
+        ]
+      },
+      "LineCreation": {
+        "lineName": "Test_Line4",
+        "displayName": "Test_Line4",
+        "loginTimeoutInSec": 900,
+        "watsLocation": "0",
+        "workstations": [
+          {
+            "workstationId": "Test_Line_Workstation1",
+            "workstationName": "Test_Line_Workstation1",
+            "processStepNames": [
+              "Test_Process4_Step1"
+            ],
+            "userGroups": [
+              "Test_User_Group"
+            ],
+            "users": [],
+            "assets": [
+              {
+                "assetName": "Test_Line_Workstation1_Asset1",
+                "type": "Test_Line_Workstation1_Asset1",
+                "assetDisplayName": "Test_Line_Workstation1_Asset1",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              },
+              {
+                "assetName": "Test_Line_Workstation1_Asset2",
+                "type": "Test_Line_Workstation1_Asset2",
+                "assetDisplayName": "Test_Line_Workstation1_Asset2",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              }
+            ]
+          },
+          {
+            "workstationId": "Test_Line_Workstation2",
+            "workstationName": "Test_Line_Workstation2",
+            "processStepNames": [
+              "Test_Process4_Step2"
+            ],
+            "userGroups": [
+              "Test_User_Group"
+            ],
+            "users": [],
+            "assets": [
+              {
+                "assetName": "Test_Line_Workstation2_Asset1",
+                "type": "Test_Line_Workstation2_Asset1",
+                "assetDisplayName": "Test_Line_Workstation2_Asset1",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              },
+              {
+                "assetName": "Test_Line_Workstation2_Asset2",
+                "type": "Test_Line_Workstation2_Asset2",
+                "assetDisplayName": "Test_Line_Workstation2_Asset2",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              }
+            ]
+          },
+          {
+            "workstationId": "Test_Line_Workstation3",
+            "workstationName": "Test_Line_Workstation3",
+            "processStepNames": [
+              "Test_Process4_Step3"
+            ],
+            "userGroups": [
+              "Test_User_Group"
+            ],
+            "users": [],
+            "assets": [
+              {
+                "assetName": "Test_Line_Workstation3_Asset1",
+                "type": "Test_Line_Workstation3_Asset1",
+                "assetDisplayName": "Test_Line_Workstation3_Asset1",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              },
+              {
+                "assetName": "Test_Line_Workstation3_Asset2",
+                "type": "Test_Line_Workstation3_Asset2",
+                "assetDisplayName": "Test_Line_Workstation3_Asset2",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              }
+            ]
+          },
+          {
+            "workstationId": "Test_Line_Workstation4",
+            "workstationName": "Test_Line_Workstation4",
+            "processStepNames": [
+              "Test_Process4_Step4"
+            ],
+            "userGroups": [
+              "Test_User_Group"
+            ],
+            "users": [],
+            "assets": [
+              {
+                "assetName": "Test_Line_Workstation4_Asset1",
+                "type": "Test_Line_Workstation4_Asset1",
+                "assetDisplayName": "Test_Line_Workstation4_Asset1",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              },
+              {
+                "assetName": "Test_Line_Workstation4_Asset2",
+                "type": "Test_Line_Workstation4_Asset2",
+                "assetDisplayName": "Test_Line_Workstation4_Asset2",
+                "serialNumber": "1234567890",
+                "displayAtWorkstation": true,
+                "expirationDate": "26-03-2027"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+
+  "UserGroups": {
+    "Test_User_Group": {
+      "userGroupName": "Test_User_Group",
+      "users": [
+        "xxsurkon@gnhearing.com",
+        "amaganti@gnhearing.com",
+        "ppuvvala@gnhearing.com"
+      ]
+    }
+  }
+}

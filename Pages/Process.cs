@@ -4,6 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Microsoft.Playwright;
 using PlaywrightDemo.Locators;
+using PlaywrightDemo.Support;
 
 namespace PlaywrightDemo.Pages
 {
@@ -40,6 +41,21 @@ namespace PlaywrightDemo.Pages
 
             }        
         }
+
+        private async Task AddProcessStepsAsync(IEnumerable<ProcessStepDefinition> steps)
+        {
+            await WaitAsync();
+            foreach (var step in steps)
+            {
+                await Page.AddButton(1).ClickAsync();
+                await Page.ProcessEditorField(0).FillAsync(step.Name);
+                await Page.ProcessEditorField(1).FillAsync(step.DisplayName);
+                await Page.ProcessEditorField(2).FillAsync(step.IsOptional.ToString().ToLowerInvariant());
+                await Page.ProcessEditorField(3).FillAsync(step.IsDhrStep.ToString().ToLowerInvariant());
+                await Page.ProcessEditorField(4).FillAsync(step.WatsProcessCode.ToString());
+                await Page.SaveOrCheckButton().ClickAsync();
+            }
+        }
         private async Task AddLineDetailsAsync(params string[] linenames)
         {
             await WaitAsync();
@@ -67,12 +83,12 @@ namespace PlaywrightDemo.Pages
         }
         private async Task SaveProcess(string processName)
         {
-            var actionButton = Page.GetProcessRowActionButton(processName);
+            var actionButton = Page.GetProcessRowActionButton(processName, "Processes");
             await actionButton.ClickAsync();
             var savebutton = Page.GetElementByText("Save");
             await savebutton.ClickAsync();
             await WaitAsync();
-            var actionButton1 = Page.GetProcessRowActionButton(processName);
+            var actionButton1 = Page.GetProcessRowActionButton(processName, "Processes");
             await actionButton1.ClickAsync();
             await WaitAsync();
             Page.ClickElementWithTextAsync("Publish").Wait();
@@ -80,12 +96,12 @@ namespace PlaywrightDemo.Pages
         }
         private async Task SaveUserGroups(string processName)
         {
-            var actionButton = Page.GetProcessRowActionButton(processName);
+            var actionButton = Page.GetProcessRowActionButton(processName, "User Groups");
             await actionButton.ClickAsync();
             var savebutton = Page.GetElementByText("Save");
             await savebutton.ClickAsync();
             await WaitAsync();
-            var actionButton1 = Page.GetProcessRowActionButton(processName);
+            var actionButton1 = Page.GetProcessRowActionButton(processName, "User Groups");
             await actionButton1.ClickAsync();
             await WaitAsync();
             Page.ClickElementWithTextAsync("Publish").Wait();
@@ -93,12 +109,12 @@ namespace PlaywrightDemo.Pages
         }
         private async Task SaveLines(string processName)
         {
-            var actionButton = Page.GetProcessRowActionButton(processName);
+            var actionButton = Page.GetProcessRowActionButton(processName, "Lines");
             await actionButton.ClickAsync();
             var savebutton = Page.GetElementByText("Save");
             await savebutton.ClickAsync();
             await WaitAsync();
-            var actionButton1 = Page.GetProcessRowActionButton(processName);
+            var actionButton1 = Page.GetProcessRowActionButton(processName, "Lines");
             await actionButton1.ClickAsync();
             await WaitAsync();
             Page.ClickElementWithTextAsync("Publish").Wait();
@@ -126,7 +142,7 @@ namespace PlaywrightDemo.Pages
         {
             await WaitAsync();
             await ScrollToProcessAsync(processName, sectionText);
-            var processRow = Page.GetProcessRow(processName);
+            var processRow = Page.GetProcessRow(processName, sectionText);
             await processRow.ClickAsync();
         }
         public async Task AddingEmailID(string emailID1, string emailID2, string emailID3, string UserGroupName)
@@ -134,6 +150,20 @@ namespace PlaywrightDemo.Pages
             await SelectProcessAsync(UserGroupName, sectionText: "User Groups");
             await AddUserEmailAsync(emailID1, emailID2, emailID3);
             await SaveUserGroups(UserGroupName);
+        }
+
+        public async Task AddUsersToUserGroupAsync(string userGroupName, IEnumerable<string> emailAddresses)
+        {
+            await SelectProcessAsync(userGroupName, sectionText: "User Groups");
+            await AddUserEmailAsync(emailAddresses.ToArray());
+            await SaveUserGroups(userGroupName);
+        }
+
+        public async Task CreateProcessStepsAsync(string processName, IEnumerable<ProcessStepDefinition> steps)
+        {
+            await SelectProcessAsync(processName);
+            await AddProcessStepsAsync(steps);
+            await SaveProcess(processName);
         }
 
         public async Task CreateProcessSteps(string step1, string step2, string step3, string processName)

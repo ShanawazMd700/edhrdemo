@@ -12,7 +12,7 @@ namespace PlaywrightDemo.StepDefinitions
     {
         private readonly AdministrationPage adminPage;
         private readonly Process processPage;
-        private string selectedLineName;
+        private string? selectedLineName;
         public AdminSteps()
         {
             var page = Hooks1.Instance?.Page;
@@ -65,7 +65,7 @@ namespace PlaywrightDemo.StepDefinitions
         [When("I add WorkStations {string} and {string} to the Line {string}")]
         public async Task WhenIAddWorkStationsAndToTheLine(string ws1, string ws2, string linename)
         {
-            await adminPage.AddWorkStations(ws1, ws2, linename);
+            await adminPage.AddWorkStations(linename, ws1, ws2);
         }
         [When("I select Line {string} and click on Workstation {string}")]
         public async Task WhenISelectLineAndClickOnWorkstation(string linename, string workstationName)
@@ -77,13 +77,13 @@ namespace PlaywrightDemo.StepDefinitions
         [When("I add Process Steps {string}, {string}, {string}")]
         public async Task WhenIAddProcessSteps(string step1, string step2, string step3)
         {
-            await adminPage.AddProcessStepsAsync(selectedLineName, step1, step2, step3);
+            await adminPage.AddProcessStepsAsync(GetSelectedLineName(), step1, step2, step3);
         }
 
         [When("I add User Group {string}")]
         public async Task WhenIAddUserGroup(string userGroupName)
         {
-            await adminPage.AddUserGroupAsync(selectedLineName, userGroupName);
+            await adminPage.AddUserGroupAsync(GetSelectedLineName(), userGroupName);
         }
 
         [When("I add an Asset with details")]
@@ -92,13 +92,49 @@ namespace PlaywrightDemo.StepDefinitions
             var row = dataTable.Rows[0];
 
             await adminPage.AddAssetAsync(
-                selectedLineName,
+                GetSelectedLineName(),
                 row["AssetName"],
                 row["AssetType"],
                 row["AssetDisplayName"],
                 row["SerialNumber"],
                 bool.Parse(row["DisplayAtWorkstation"]),
                 DateTime.ParseExact(row["ExpirationDate"], "dd-MM-yyyy", CultureInfo.InvariantCulture));
+        }
+
+        [When("I add Processes with All Process Steps Set to True")]
+        public async Task WhenIAddProcessesWithAllProcessStepsSetToTrue()
+        {
+            await adminPage.CreateConfigurationAsync("AllProcessStepsSettoTrue");
+        }
+
+        [When("I add Processes with All Process Steps Set to False")]
+        public async Task WhenIAddProcessesWithAllProcessStepsSetToFalse()
+        {
+            await adminPage.CreateConfigurationAsync("AllProcessStepsSettoFalse");
+        }
+
+        [When("I add Processes when Three Process Steps Set to True One False")]
+        public async Task WhenIAddProcessesWhenThreeProcessStepsSetToTrueOneFalse()
+        {
+            await adminPage.CreateConfigurationAsync("ThreeProcessStepsSettoTrueOneFalse");
+        }
+
+        [When("I add Processes When One Process Step Set to True Three False")]
+        public async Task WhenIAddProcessesWhenOneProcessStepSetToTrueThreeFalse()
+        {
+            await adminPage.CreateConfigurationAsync("OneProcessStepSettoTrueThreeFalse");
+        }
+
+        private string GetSelectedLineName() =>
+            !string.IsNullOrWhiteSpace(selectedLineName)
+                ? selectedLineName
+                : throw new InvalidOperationException("Select a line and workstation before adding workstation-linked data.");
+
+
+        [When("I Create Processes based on the Configuration conditions {string}")]
+        public async Task WhenICreateProcessesBasedOnTheConfigurationConditionsAsync(string condition)
+        {
+            await adminPage.CreateConfigurationAsync(condition);
         }
 
 
