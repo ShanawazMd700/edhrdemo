@@ -203,7 +203,7 @@
         "watsLocation": "900",
         "workstations": [
           {
-            "workstationId": "Test_Line_Workstation1",
+            "workstationId": "Test_Line2_Workstation1",
             "workstationName": "Test_Line_Workstation1",
             "processStepNames": [
               "Test_Process2_Step1"
@@ -232,7 +232,7 @@
             ]
           },
           {
-            "workstationId": "Test_Line_Workstation2",
+            "workstationId": "Test_Line2_Workstation2",
             "workstationName": "Test_Line_Workstation2",
             "processStepNames": [
               "Test_Process2_Step2"
@@ -261,7 +261,7 @@
             ]
           },
           {
-            "workstationId": "Test_Line_Workstation3",
+            "workstationId": "Test_Line2_Workstation3",
             "workstationName": "Test_Line_Workstation3",
             "processStepNames": [
               "Test_Process2_Step3"
@@ -290,7 +290,7 @@
             ]
           },
           {
-            "workstationId": "Test_Line_Workstation4",
+            "workstationId": "Test_Line2_Workstation4",
             "workstationName": "Test_Line_Workstation4",
             "processStepNames": [
               "Test_Process2_Step4"
@@ -364,7 +364,7 @@
         "watsLocation": "900",
         "workstations": [
           {
-            "workstationId": "Test_Line_Workstation1",
+            "workstationId": "Test_Line3_Workstation1",
             "workstationName": "Test_Line_Workstation1",
             "processStepNames": [
               "Test_Process3_Step1"
@@ -393,7 +393,7 @@
             ]
           },
           {
-            "workstationId": "Test_Line_Workstation2",
+            "workstationId": "Test_Line3_Workstation2",
             "workstationName": "Test_Line_Workstation2",
             "processStepNames": [
               "Test_Process3_Step2"
@@ -422,7 +422,7 @@
             ]
           },
           {
-            "workstationId": "Test_Line_Workstation3",
+            "workstationId": "Test_Line3_Workstation3",
             "workstationName": "Test_Line_Workstation3",
             "processStepNames": [
               "Test_Process3_Step3"
@@ -451,7 +451,7 @@
             ]
           },
           {
-            "workstationId": "Test_Line_Workstation4",
+            "workstationId": "Test_Line3_Workstation4",
             "workstationName": "Test_Line_Workstation4",
             "processStepNames": [
               "Test_Process3_Step4"
@@ -525,7 +525,7 @@
         "watsLocation": "900",
         "workstations": [
           {
-            "workstationId": "Test_Line_Workstation1",
+            "workstationId": "Test_Line4_Workstation1",
             "workstationName": "Test_Line_Workstation1",
             "processStepNames": [
               "Test_Process4_Step1"
@@ -554,7 +554,7 @@
             ]
           },
           {
-            "workstationId": "Test_Line_Workstation2",
+            "workstationId": "Test_Line4_Workstation2",
             "workstationName": "Test_Line_Workstation2",
             "processStepNames": [
               "Test_Process4_Step2"
@@ -583,7 +583,7 @@
             ]
           },
           {
-            "workstationId": "Test_Line_Workstation3",
+            "workstationId": "Test_Line4_Workstation3",
             "workstationName": "Test_Line_Workstation3",
             "processStepNames": [
               "Test_Process4_Step3"
@@ -612,7 +612,7 @@
             ]
           },
           {
-            "workstationId": "Test_Line_Workstation4",
+            "workstationId": "Test_Line4_Workstation4",
             "workstationName": "Test_Line_Workstation4",
             "processStepNames": [
               "Test_Process4_Step4"

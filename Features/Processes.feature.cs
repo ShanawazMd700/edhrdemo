@@ -404,8 +404,8 @@ await this.FeatureBackgroundAsync();
         
         [global::NUnit.Framework.TestAttribute()]
         [global::NUnit.Framework.DescriptionAttribute("Adding processes When based on the Configuration steps")]
-        [global::NUnit.Framework.TestCaseAttribute("AllProcessStepsSettoFalse", "8", null)]
-        [global::NUnit.Framework.TestCaseAttribute("AllProcessStepsSettoTrue", "9", null)]
+        [global::NUnit.Framework.TestCaseAttribute("AllProcessStepsSettoTrue", "8", null)]
+        [global::NUnit.Framework.TestCaseAttribute("AllProcessStepsSettoFalse", "9", null)]
         [global::NUnit.Framework.TestCaseAttribute("ThreeProcessStepsSettoTrueOneFalse", "10", null)]
         [global::NUnit.Framework.TestCaseAttribute("OneProcessStepSettoTrueThreeFalse", "11", null)]
         public async global::System.Threading.Tasks.Task AddingProcessesWhenBasedOnTheConfigurationSteps(string condition, string @__pickleIndex, string[] exampleTags)

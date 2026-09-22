@@ -40,8 +40,11 @@ public static class AdminAccessConfigurationLoader
             throw new FileNotFoundException($"Configuration file was not found: {path}", path);
         }
 
-        return JsonConvert.DeserializeObject<AdminAccessConfiguration>(File.ReadAllText(path))
+        var configuration = JsonConvert.DeserializeObject<AdminAccessConfiguration>(File.ReadAllText(path))
             ?? throw new InvalidOperationException($"Configuration file '{path}' is empty or invalid.");
+
+        ValidateUniqueWorkstationIds(configuration);
+        return configuration;
     }
 
     private static void Validate(ProcessConfiguration configuration, string configurationName)
@@ -67,6 +70,22 @@ public static class AdminAccessConfigurationLoader
             configuration.LineCreation.Workstations.Any(workstation => workstation is null || string.IsNullOrWhiteSpace(workstation.Id) || string.IsNullOrWhiteSpace(workstation.Name)))
         {
             throw new InvalidOperationException($"Process configuration '{configurationName}' contains a process step or workstation with a missing required value.");
+        }
+    }
+
+    private static void ValidateUniqueWorkstationIds(AdminAccessConfiguration configuration)
+    {
+        var duplicateId = configuration.Processes
+            .Where(entry => entry.Value?.LineCreation?.Workstations is not null)
+            .SelectMany(entry => entry.Value.LineCreation.Workstations)
+            .Where(workstation => workstation is not null && !string.IsNullOrWhiteSpace(workstation.Id))
+            .GroupBy(workstation => workstation.Id, StringComparer.OrdinalIgnoreCase)
+            .FirstOrDefault(group => group.Count() > 1);
+
+        if (duplicateId is not null)
+        {
+            throw new InvalidOperationException(
+                $"Workstation ID '{duplicateId.Key}' appears more than once in {FileName}. Workstation IDs must be unique across all lines.");
         }
     }
 }

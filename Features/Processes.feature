@@ -50,8 +50,8 @@ Scenario Outline: Adding processes When based on the Configuration steps
 
 Examples:
     | condition                          |
-    | AllProcessStepsSettoFalse          |
     | AllProcessStepsSettoTrue           |
+    | AllProcessStepsSettoFalse          |
     | ThreeProcessStepsSettoTrueOneFalse |
     | OneProcessStepSettoTrueThreeFalse  |
 
