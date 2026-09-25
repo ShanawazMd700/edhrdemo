@@ -1,0 +1,10 @@
+{
+  "workstationLocators": {
+    "logOutButton": "button.action-button.button-default.button-single",
+    "camerabutton": "i.fa-solid.fa-camera.video-button",
+    "switchcamera": "i.fa-solid.fa-camera-rotate.visible.video-rotate-button.circle"
+
+
+
+  }
+}

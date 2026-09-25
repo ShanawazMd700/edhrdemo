@@ -101,25 +101,25 @@ namespace PlaywrightDemo.Pages
         {
             await WaitAsync();
 
-                var addButton = Page.GetAddButtonBy("Lines");
-                await addButton.ClickAsync();
+            var addButton = Page.GetAddButtonBy("Lines");
+            await addButton.ClickAsync();
 
-                var stepNameInput = Page.ProcessEditorField(0);
-                await stepNameInput.FillAsync(lineName);
+            var stepNameInput = Page.ProcessEditorField(0);
+            await stepNameInput.FillAsync(lineName);
 
-                var stepNameInput1 = Page.ProcessEditorField(1);
-                await stepNameInput1.FillAsync(displayName);
+            var stepNameInput1 = Page.ProcessEditorField(1);
+            await stepNameInput1.FillAsync(displayName);
 
-                var stepNameInput2 = Page.ProcessEditorField(2);
-                await stepNameInput2.FillAsync(loginTimeoutInSeconds.ToString());
+            var stepNameInput2 = Page.ProcessEditorField(2);
+            await stepNameInput2.FillAsync(loginTimeoutInSeconds.ToString());
 
-                var stepNameInput3 = Page.ProcessEditorField(3);
-                await stepNameInput3.FillAsync(watsLocation);
+            var stepNameInput3 = Page.ProcessEditorField(3);
+            await stepNameInput3.FillAsync(watsLocation);
 
-                var saveButton = Page.SaveOrCheckButton();
-                await saveButton.ClickAsync();
-                await ScrollToLinesAsync(lineName);
-                await SaveLinesProcess(lineName);
+            var saveButton = Page.SaveOrCheckButton();
+            await saveButton.ClickAsync();
+            await ScrollToLinesAsync(lineName);
+            await SaveLinesProcess(lineName);
 
         }
 
@@ -138,7 +138,7 @@ namespace PlaywrightDemo.Pages
         {
             await WaitAsync();
             await ScrollToLinesAsync(lineName);
-            var lineRow = Page.GetProcessRow(lineName, "Lines"); 
+            var lineRow = Page.GetProcessRow(lineName, "Lines");
             await lineRow.ClickAsync();
             await AddWorkStationsAsync(workstations);
             await SaveLinesProcess(lineName);
@@ -179,7 +179,7 @@ namespace PlaywrightDemo.Pages
                 await Page.ClickAddButtonByAsync("Process Steps");
                 await Page.ProcessEditorField(0).FillAsync(stepName);
                 await Page.SaveOrCheckButton().ClickAsync();
-                
+
             }
             await SaveLinesProcess(linename); // Save/Publish after each step
         }
@@ -276,5 +276,32 @@ namespace PlaywrightDemo.Pages
                 }
             }
         }
+
+        public async Task NavigatingToAnotherTab(string tabname)
+        {
+            await NavigateToAsync(tabname);
+            await Page.LogoutButton(0).WaitForAsync(new() { State = WaitForSelectorState.Visible });
+        }
+        public async Task OpenCamera()
+        {
+            var logoutButton = Page.LogoutButton(0);
+
+            if (await logoutButton.IsVisibleAsync())
+            {
+                await logoutButton.ClickAsync();
+            }
+            await Page.CameraButton().ClickAsync();
+            await WaitAsync();
+            var camerarotateButton = Page.RotateCameraButton();
+            if(await camerarotateButton.IsVisibleAsync())
+            {
+                await camerarotateButton.ClickAsync();
+                await WaitAsync();
+                await camerarotateButton.ClickAsync();
+                await WaitAsync();
+            }
+
+        }
+       
     }
 }

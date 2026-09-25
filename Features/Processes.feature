@@ -44,7 +44,6 @@ Scenario: Adding Assets to the Processes
 		| Asset_100_1  | Sensor       | Asset_100_1       | 1234567890   | true                 | 26-03-2027     |
 
 
-
 Scenario Outline: Adding processes When based on the Configuration steps
     When I Create Processes based on the Configuration conditions '<condition>'
 
@@ -55,3 +54,24 @@ Examples:
     | ThreeProcessStepsSettoTrueOneFalse |
     | OneProcessStepSettoTrueThreeFalse  |
 
+	
+Scenario: Conducting Workflow for the Website
+	When I navigate to the Website "https://app-order-tracker-eus-tst.azurewebsites.net/"
+	When I open the QR code "Test_Line_Workstation1_Test_Line1.png" of "WorkStationQR"
+	And I open Camera to scan QR Code
+
+Scenario: Conducting Workflow for the Website with Assetscanning
+	When I navigate to the Website "https://app-order-tracker-eus-tst.azurewebsites.net/"
+	When I open the QR code "Test_Line_Workstation1_Test_Line1.png" of "WorkStationQR"
+	And I open Camera to scan QR Code
+	When I open the QR code "Test_Process1_OrderQR.png" of "OrderQR"
+	And I open Camera to scan QR Code
+
+
+Scenario: Verify Workstation ID and Name are displayed at the top of the application
+	When I navigate to the Website "https://app-order-tracker-eus-tst.azurewebsites.net/"
+	When I open the QR code "Test_Line_Workstation1_Test_Line1.png" of "WorkStationQR"
+	And I open Camera to scan QR Code
+	When I open the QR code "Test_Process1_OrderQR.png" of "OrderQR"
+	And I open Camera to scan QR Code
+	Then the Workstation ID "Test_Line_Workstation1" and Name "Test_Line_Workstation1" should be displayed at the top of the application

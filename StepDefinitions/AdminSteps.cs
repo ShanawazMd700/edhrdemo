@@ -12,6 +12,8 @@ namespace PlaywrightDemo.StepDefinitions
     {
         private readonly AdministrationPage adminPage;
         private readonly Process processPage;
+        private readonly WorkStationPage workStationPage;
+  
         private string? selectedLineName;
         public AdminSteps()
         {
@@ -23,6 +25,7 @@ namespace PlaywrightDemo.StepDefinitions
 
             adminPage = new AdministrationPage(page);
             processPage = new Process(page);
+            workStationPage = new WorkStationPage(page);
         }
 
         [Given("I navigate to administration")]
@@ -114,6 +117,22 @@ namespace PlaywrightDemo.StepDefinitions
             await adminPage.CreateConfigurationAsync(condition);
         }
 
-
+        [When("I navigate to the Website {string}")]
+        public async Task WhenINavigateToTheWebsite(string url)
+        { 
+            await adminPage.NavigatingToAnotherTab(url);
+          
+        }
+        [When("I open Camera to scan QR Code")]
+        public async Task WhenIOpenCameraToScanQRCode()
+        {
+            await adminPage.OpenCamera();
+        }
+        [Then("the Workstation ID {string} and Name {string} should be displayed at the top of the application")]
+        public async Task ThenTheWorkstationIDAndNameShouldBeDisplayedAtTheTopOfTheApplication(string id, string name)
+        {
+            await workStationPage.ValidateWorkstations(id, name);
+        }
+        
     }
 }

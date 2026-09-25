@@ -60,11 +60,13 @@ namespace PlaywrightDemo.Locators
         public static ILocator AddButton(this IPage page, int index) =>
             page.Locator("button:has(i.fa-plus-square-o)").Nth(index);
         public static ILocator GetPlusButtonByUserGroup(this IPage page, string groupName) =>
-    page.Locator("div.optionbox-group")
+         page.Locator("div.optionbox-group")
         .Filter(new() { Has = page.Locator("div.optionbox-header", new() { HasText = groupName }) })
         .Locator("i.fa-plus-square-o");
 
-       
+        public static ILocator LogOutButton(this IPage page) =>
+          page.Locator("button:action-button button-default button-single");
+
 
 
         public static ILocator AddButton1(this IPage page, string sectionText) =>
@@ -154,10 +156,6 @@ namespace PlaywrightDemo.Locators
         //Editor form input fields
         public static ILocator ProcessEditorField(this IPage page, int index) =>
             page.Locator(".editor-input").Nth(index);
-        //// 1. Fill Process Name
-        //await page.GetFormFieldInput("Editor", "Process Name").FillAsync("My New Process");
-        //// 2. Fill Process Display Name
-        //await page.GetFormFieldInput("Editor", "Process Display Name").FillAsync("Display Process")
 
         public static ILocator GetElementByText(this IPage page, string text, bool exact = false) =>
             page.GetByText(text, new() { Exact = exact });
@@ -247,5 +245,20 @@ namespace PlaywrightDemo.Locators
             await page.GetOptionRow(sectionText, optionText).ClickAsync();
 
         }
+
+        public static ILocator LogoutButton(this IPage page, int index) =>
+            page.Locator("button.action-button.button-default.button-single").Nth(index);
+
+        public static ILocator CameraButton(this IPage page) =>
+            page.Locator("i.fa-solid.fa-camera.video-button");     
+
+        public static ILocator RotateCameraButton(this IPage page) =>
+            page.Locator("i.fa-solid.fa-camera-rotate.visible.video-rotate-button.circle");
+
+        public static ILocator LogoutButton(this IPage page) =>
+            page.Locator("button.action-button.button-default.button-single");
+
+        public static ILocator WorkstationDisplay(this IPage page) =>
+        page.Locator("div.orders div.display");
     }
 }

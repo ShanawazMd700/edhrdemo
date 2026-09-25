@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MobileAppium\MobileAppium.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Resources\AdminAccessValues.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

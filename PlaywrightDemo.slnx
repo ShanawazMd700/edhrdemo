@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="../MobileAppium/MobileAppium.csproj" Id="11cf3484-36d8-4966-8f8e-a47aaa10be59" />
   <Project Path="PlaywrightDemo.csproj" />
 </Solution>

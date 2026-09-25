@@ -1,12 +1,13 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.Playwright;
+using System;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace PlaywrightDemo.Pages
 {
     public abstract class BasePage
     {
-        protected IPage Page { get; }
+        protected IPage Page { get; private set; }
 
         protected BasePage(IPage page)
         {
@@ -131,7 +132,7 @@ namespace PlaywrightDemo.Pages
 
             // 2. Target the specific row inside that isolated column
             var targetRow = scrollContainer.Locator(".optionbox.optionbox-option.optionbox-content")
-                                .GetByText(lineName , new() { Exact = true });
+                                .GetByText(lineName, new() { Exact = true });
 
             int attempt = 0;
 
@@ -162,5 +163,91 @@ namespace PlaywrightDemo.Pages
         {
             await Task.Delay(TimeSpan.FromSeconds(seconds));
         }
+
+
+        protected async Task<IPage> NavigateToAsync(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+                throw new ArgumentException("URL cannot be empty.", nameof(url));
+
+            if (!Uri.TryCreate(url, UriKind.Absolute, out var targetUri))
+                throw new ArgumentException(
+                    $"Invalid URL: {url}", nameof(url));
+
+            // Check all currently open Edge tabs
+            foreach (var page in Page.Context.Pages)
+            {
+                if (page.IsClosed)
+                    continue;
+
+                var currentUrl = page.Url;
+
+                if (string.IsNullOrWhiteSpace(currentUrl))
+                    continue;
+
+                if (!Uri.TryCreate(currentUrl, UriKind.Absolute, out var currentUri))
+                    continue;
+
+                bool sameUrl = string.Equals(
+                    currentUri.ToString().TrimEnd('/'),
+                    targetUri.ToString().TrimEnd('/'),
+                    StringComparison.OrdinalIgnoreCase);
+
+                if (sameUrl)
+                {
+                    // Website already open → switch to that tab
+                    await page.BringToFrontAsync();
+
+                    // Make sure Edge window is maximized
+                    await MaximizeEdgeWindowAsync(page);
+
+                    Page = page;
+
+                    return page;
+                }
+            }
+
+            // URL is not open → create a new tab
+            var newPage = await Page.Context.NewPageAsync();
+
+            await newPage.GotoAsync(url);
+
+            await newPage.BringToFrontAsync();
+
+            // IMPORTANT:
+            // Maximize the Edge window after opening the new tab
+            await MaximizeEdgeWindowAsync(newPage);
+
+            Page = newPage;
+
+            return newPage;
+        }
+        private async Task MaximizeEdgeWindowAsync(IPage page)
+        {
+            var cdp = await page.Context.NewCDPSessionAsync(page);
+
+            var windowInfo = await cdp.SendAsync("Browser.getWindowForTarget");
+
+            if (windowInfo is not { ValueKind: JsonValueKind.Object } windowInfoValue ||
+                !windowInfoValue.TryGetProperty("windowId", out var windowIdElement))
+            {
+                throw new InvalidOperationException(
+                    "Could not determine the Edge window ID.");
+            }
+
+            int windowId = windowIdElement.GetInt32();
+
+            await cdp.SendAsync(
+                "Browser.setWindowBounds",
+                new Dictionary<string, object>
+                {
+                    ["windowId"] = windowId,
+                    ["bounds"] = new Dictionary<string, object>
+                    {
+                        ["windowState"] = "maximized"
+                    }
+                });
+        }
+
     }
 }
