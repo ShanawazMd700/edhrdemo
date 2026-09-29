@@ -164,6 +164,11 @@ namespace PlaywrightDemo.Pages
             await Task.Delay(TimeSpan.FromSeconds(seconds));
         }
 
+        protected async Task WaitAsync1(int seconds)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(seconds));
+        }
+
 
         protected async Task<IPage> NavigateToAsync(string url)
         {

@@ -9,6 +9,7 @@ namespace PlaywrightDemo.Pages
     public class AdministrationPage : BasePage
     {
         private const string AdministrationUrl = "https://app-order-tracker-eus-tst.azurewebsites.net/administration";
+        private int _openCameraCount = 0;
         //private readonly Process _process;
         public AdministrationPage(IPage page) : base(page)
         {
@@ -184,13 +185,7 @@ namespace PlaywrightDemo.Pages
             await SaveLinesProcess(linename); // Save/Publish after each step
         }
 
-        //public async Task AddUserGroupAsync(string linename, string userGroupName)
-        //{
-        //    await Page.ClickAddButtonByAsync("User Groups");
-        //    await Page.ProcessEditorField(0).FillAsync(userGroupName);
-        //    await Page.SaveOrCheckButton("User Groups").ClickAsync();
-        //    await SaveLinesProcess(linename); // Save/Publish after this addition
-        //}
+
         public async Task AddUserGroupAsync(string linename, string userGroupName)
         {
             await Page.ClickAddButtonByAsync("User Groups");
@@ -279,29 +274,147 @@ namespace PlaywrightDemo.Pages
 
         public async Task NavigatingToAnotherTab(string tabname)
         {
+            //PrintAllPages("BEFORE TAB SWITCH");
+
             await NavigateToAsync(tabname);
-            await Page.LogoutButton(0).WaitForAsync(new() { State = WaitForSelectorState.Visible });
+
+            //PrintAllPages("AFTER TAB SWITCH");
+
+            await Page.LogoutButton(0).WaitForAsync(
+                new()
+                {
+                    State = WaitForSelectorState.Visible
+                });
         }
+
+
+
+        //private int _openCameraCount1 = 0;
         public async Task OpenCamera()
         {
-            var logoutButton = Page.LogoutButton(0);
+            _openCameraCount++;
 
-            if (await logoutButton.IsVisibleAsync())
+            // Click Logout only on the first OpenCamera call
+            if (_openCameraCount == 1)
             {
-                await logoutButton.ClickAsync();
+                var logoutButton = Page.LogoutButton(0);
+
+                if (await logoutButton.IsVisibleAsync())
+                {
+                    await logoutButton.ClickAsync();
+                }
             }
+
             await Page.CameraButton().ClickAsync();
             await WaitAsync();
-            var camerarotateButton = Page.RotateCameraButton();
-            if(await camerarotateButton.IsVisibleAsync())
+
+            var cameraRotateButton = Page.RotateCameraButton();
+
+            if (await cameraRotateButton.IsVisibleAsync())
             {
-                await camerarotateButton.ClickAsync();
+                await cameraRotateButton.ClickAsync();
                 await WaitAsync();
-                await camerarotateButton.ClickAsync();
+
+                await cameraRotateButton.ClickAsync();
                 await WaitAsync();
             }
-
         }
-       
+
+        public async Task ValidateWorkstations(string id, string name)
+        {
+            await Assertions.Expect(Page.WorkstationDisplay())
+                .ToHaveTextAsync($"{id}: {name}");
+        }
+        public async Task ReloadPageAsync()
+        {
+            await Page.ReloadAsync();
+        }
+
+        public async Task SelectDeviceAsync(string deviceName)
+        {
+            await Page.SelectDevice().SelectOptionAsync(deviceName);
+        }
+        public async Task SelectRandomDeviceAsync()
+        {
+            var dropdown = Page.SelectDevice();
+
+            var options = await dropdown.Locator("option").AllAsync();
+
+            // Skip "(Select device)"
+            var validOptions = options.Skip(1).ToList();
+
+            if (!validOptions.Any())
+                throw new InvalidOperationException("No devices available.");
+
+            var random = new Random();
+            var randomOption = validOptions[random.Next(validOptions.Count)];
+
+            var value = await randomOption.GetAttributeAsync("value");
+
+            await dropdown.SelectOptionAsync(value!);
+        }
+        public async Task SelectDevice(string deviceName)
+        {
+            await Page.SelectDevice().SelectOptionAsync(deviceName);
+        }
+        
+        public async Task RaiseIssue1(string serialno, params string[] issues)
+        {
+            await Page.GetByText("Report Failure").ClickAsync();
+            await SelectDevice(serialno);
+            foreach (var issue in issues)
+            {
+                await Page.GetByText(issue, new() { Exact = true }).ClickAsync();
+            }
+            var reportButton = Page.ReportErrorandKeep();
+            await reportButton.ClickAsync();
+            await WaitAsync();
+            await Page.GetByText("Complete Step").ClickAsync();
+        }
+        public async Task SelectingReworkOptions(string serialno, params string[] steps)
+        {
+            await Page.ReworkButton(serialno).ClickAsync();
+            foreach(var step in steps)
+            {
+                await Page.DeviceIssueOption(step).ClickAsync();
+            }
+            await WaitAsync();
+        }
+        public async Task SelectRootCauses(params string[] causes)
+        {
+            await Page.GetByText("Select root causes").ClickAsync();
+            foreach(var cause in causes)
+            {
+                await Page.DeviceIssueOption(cause).ClickAsync();
+            }
+        }
+        public async Task SelectFaultAreas(params string[] faults)
+        {
+            await Page.GetByText("Select fault areass").ClickAsync();
+            foreach(var fault in faults)
+            {
+                await Page.DeviceIssueOption(fault).ClickAsync();
+            }
+            await WaitAsync();
+            await Page.GetByText("Report rework").ClickAsync();
+        }
+        private int reworkcount = 0;
+        public async Task SelectRootCausesAndFaultAreas(string tab, params string[] options)
+        {
+            reworkcount++;
+            await Page.GetByText(tab).ClickAsync();
+            foreach (var option in options)
+            {
+                await Page.DeviceIssueOption(option).ClickAsync();
+            }
+            await WaitAsync();
+            if(reworkcount == 2)
+            {
+                await Page.GetByText("Report rework").ClickAsync();
+                await Page.GetByText("Complete Step").ClickAsync();
+            }
+            await WaitAsync();
+           
+        }
     }
 }

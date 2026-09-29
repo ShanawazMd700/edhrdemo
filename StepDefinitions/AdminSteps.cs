@@ -131,8 +131,29 @@ namespace PlaywrightDemo.StepDefinitions
         [Then("the Workstation ID {string} and Name {string} should be displayed at the top of the application")]
         public async Task ThenTheWorkstationIDAndNameShouldBeDisplayedAtTheTopOfTheApplication(string id, string name)
         {
-            await workStationPage.ValidateWorkstations(id, name);
+            await adminPage.ValidateWorkstations(id, name);
         }
-        
+        [When("I reload the page")]
+        public async Task WhenIReloadThePage()
+        {
+            await adminPage.ReloadPageAsync();
+        }
+        [When("With serial number {string} the issues {string}, {string}, {string} are selected")]
+        public async Task WhenWithSerialNumberTheIssuesAreSelected(string sno, string issue1, string issue2, string issue3)
+        {
+            await adminPage.RaiseIssue1(sno, issue1, issue2, issue3);
+        }
+        [When("I rework on the device {string} with the options {string}, {string}, {string}")]
+        public async Task WhenIReworkOnTheDeviceWithTheOptions(string serialno, string solution1, string solution2, string solution3)
+        {
+            await adminPage.SelectingReworkOptions(serialno, solution1, solution2, solution3);
+        }
+        [When("I select {string} with the options {string}, {string}, {string}")]
+        public async Task WhenISelectWithTheOptions(string tab, string option1, string option2, string option3)
+        {
+            await adminPage.SelectRootCausesAndFaultAreas(tab, option1, option2, option3);
+        }
+
+
     }
 }

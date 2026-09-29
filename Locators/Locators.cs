@@ -259,6 +259,25 @@ namespace PlaywrightDemo.Locators
             page.Locator("button.action-button.button-default.button-single");
 
         public static ILocator WorkstationDisplay(this IPage page) =>
-        page.Locator("div.orders div.display");
+        page.Locator("div.orders > div.display");
+
+        public static ILocator SelectDevice(this IPage page) =>
+            page.Locator(".optionbox-option select");
+
+        public static ILocator ReportErrorandKeep(this IPage page) => page.Locator("i.fa-solid.fa-toolbox");
+        public static ILocator ReportErrorandRemove(this IPage page) => page.Locator("i.fa-solid.fa-ban");
+
+        public static ILocator DeviceIssueOption(this IPage page, string optionText) =>
+            page.Locator("div.optionlist.optionbox")
+                .Locator("div.optionbox-option")
+                .GetByText(optionText, new() { Exact = true });
+        public static ILocator ReworkButton(this IPage page, string serialNumber) =>
+        page.Locator("div.infobox")
+        .Filter(new LocatorFilterOptions
+        {
+            HasTextString = serialNumber
+        })
+        .GetByRole(AriaRole.Button, new() { Name = "Rework" });
+
     }
 }

@@ -114,7 +114,7 @@ await testRunner.GivenAsync("I navigate to administration", ((string)(null)), ((
         
         private static global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages InitializeCucumberMessages()
         {
-            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/Processes.feature.ndjson", 17);
+            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/Processes.feature.ndjson", 24);
         }
         
         [global::NUnit.Framework.TestAttribute()]
@@ -556,6 +556,218 @@ await this.FeatureBackgroundAsync();
 #line 77
  await testRunner.ThenAsync("the Workstation ID \"Test_Line_Workstation1\" and Name \"Test_Line_Workstation1\" sho" +
                         "uld be displayed at the top of the application", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 78
+ await testRunner.WhenAsync("I reload the page", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 79
+ await testRunner.WhenAsync("I open the QR code \"Test_Line_Workstation2_Test_Line1.png\" of \"WorkStationQR\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 80
+ await testRunner.AndAsync("I open Camera to scan QR Code", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 81
+ await testRunner.WhenAsync("I open the QR code \"Test_Process1_OrderQR.png\" of \"OrderQR\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 82
+ await testRunner.ThenAsync("the Workstation ID \"Test_Line_Workstation2\" and Name \"Test_Line_Workstation2\" sho" +
+                        "uld be displayed at the top of the application", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Raising the issues with the device")]
+        public async global::System.Threading.Tasks.Task RaisingTheIssuesWithTheDevice()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "15";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Raising the issues with the device", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 85
+this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 4
+await this.FeatureBackgroundAsync();
+#line hidden
+#line 86
+  await testRunner.WhenAsync("I navigate to the Website \"https://app-order-tracker-eus-tst.azurewebsites.net/\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 87
+ await testRunner.WhenAsync("I open the QR code \"Test_Line_Workstation1_Test_Line1.png\" of \"WorkStationQR\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 88
+ await testRunner.AndAsync("I open Camera to scan QR Code", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 89
+ await testRunner.WhenAsync("I open the QR code \"Test_Process1_OrderQR.png\" of \"OrderQR\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 90
+ await testRunner.AndAsync("I open Camera to scan QR Code", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Raising issues across the workstations")]
+        [global::NUnit.Framework.TestCaseAttribute("Test_Line_Workstation1_Test_Line1.png", "Test_Process1_OrderQR.png", "16", null)]
+        [global::NUnit.Framework.TestCaseAttribute("Test_Line_Workstation2_Test_Line1.png", "Test_Process2_OrderQR.png", "17", null)]
+        [global::NUnit.Framework.TestCaseAttribute("Test_Line_Workstation3_Test_Line1.png", "Test_Process3_OrderQR.png", "18", null)]
+        [global::NUnit.Framework.TestCaseAttribute("Test_Line_Workstation4_Test_Line1.png", "Test_Process4_OrderQR.png", "19", null)]
+        public async global::System.Threading.Tasks.Task RaisingIssuesAcrossTheWorkstations(string workstationQR, string orderQR, string @__pickleIndex, string[] exampleTags)
+        {
+            string[] tagsOfScenario = exampleTags;
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("WorkstationQR", workstationQR);
+            argumentsOfScenario.Add("OrderQR", orderQR);
+            string pickleIndex = @__pickleIndex;
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Raising issues across the workstations", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 94
+this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 4
+await this.FeatureBackgroundAsync();
+#line hidden
+#line 95
+ await testRunner.WhenAsync("I navigate to the Website \"https://app-order-tracker-eus-tst.azurewebsites.net/\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 96
+ await testRunner.WhenAsync(string.Format("I open the QR code \"{0}\" of \"WorkStationQR\"", workstationQR), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 97
+ await testRunner.AndAsync("I open Camera to scan QR Code", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 98
+ await testRunner.WhenAsync(string.Format("I open the QR code \"{0}\" of \"OrderQR\"", orderQR), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 99
+ await testRunner.AndAsync("I open Camera to scan QR Code", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Raising issues with device")]
+        public async global::System.Threading.Tasks.Task RaisingIssuesWithDevice()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "20";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Raising issues with device", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 108
+this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 4
+await this.FeatureBackgroundAsync();
+#line hidden
+#line 109
+  await testRunner.WhenAsync("I navigate to the Website \"https://app-order-tracker-eus-tst.azurewebsites.net/\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 110
+ await testRunner.WhenAsync("I open the QR code \"Test_Line_Workstation1_Test_Line1.png\" of \"WorkStationQR\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 111
+ await testRunner.AndAsync("I open Camera to scan QR Code", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 112
+ await testRunner.WhenAsync("I open the QR code \"Test_Process1_OrderQR.png\" of \"OrderQR\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 113
+ await testRunner.AndAsync("I open Camera to scan QR Code", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 114
+ await testRunner.WhenAsync("With serial number \"2027888802\" the issues \"Device Feedback\", \"Device Dead\", \"Ven" +
+                        "t Broken\" are selected", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Reworking on the devices with the issues")]
+        public async global::System.Threading.Tasks.Task ReworkingOnTheDevicesWithTheIssues()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "21";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Reworking on the devices with the issues", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 117
+this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 4
+await this.FeatureBackgroundAsync();
+#line hidden
+#line 118
+  await testRunner.WhenAsync("I navigate to the Website \"https://app-order-tracker-eus-tst.azurewebsites.net/\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 119
+ await testRunner.WhenAsync("I open the QR code \"Test_Line_Workstation1_Test_Line1.png\" of \"WorkStationQR\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 120
+ await testRunner.AndAsync("I open Camera to scan QR Code", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 121
+ await testRunner.WhenAsync("I open the QR code \"Test_Process1_OrderQR.png\" of \"OrderQR\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 122
+ await testRunner.AndAsync("I open Camera to scan QR Code", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 123
+ await testRunner.WhenAsync("With serial number \"2027888802\" the issues \"Device Feedback\", \"Device Dead\", \"Ven" +
+                        "t Broken\" are selected", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 124
+ await testRunner.AndAsync("I open Camera to scan QR Code", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 125
+ await testRunner.WhenAsync("I rework on the device \"2027888802\" with the options \"Change Hybrid\", \"Change Pus" +
+                        "h Button\", \"Repair Seam\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 126
+ await testRunner.WhenAsync("I select \"Select root causes\" with the options \"Dead Component\", \"Bad Workmanship" +
+                        "\", \"Operator Error\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 127
+ await testRunner.WhenAsync("I select \"Select fault areas\" with the options \"Shell\", \"Lacquer\", \"Housing\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();

@@ -15,9 +15,7 @@ namespace PlaywrightDemo.StepDefinitions
         public MobileSteps()
         {
             _driverManager = new AppiumDriverManager();
-
             _driverManager.StartDriver();
-
             _mobileActions = new MobileActions(_driverManager);
         }
 
@@ -32,7 +30,5 @@ namespace PlaywrightDemo.StepDefinitions
         {
             _mobileActions.SelectQrCode1(qrcode, folderName);
         }
-
-
     }
 }

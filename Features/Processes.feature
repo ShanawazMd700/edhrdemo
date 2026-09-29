@@ -75,3 +75,53 @@ Scenario: Verify Workstation ID and Name are displayed at the top of the applica
 	When I open the QR code "Test_Process1_OrderQR.png" of "OrderQR"
 	And I open Camera to scan QR Code
 	Then the Workstation ID "Test_Line_Workstation1" and Name "Test_Line_Workstation1" should be displayed at the top of the application
+	When I reload the page
+	When I open the QR code "Test_Line_Workstation2_Test_Line1.png" of "WorkStationQR"
+	And I open Camera to scan QR Code
+	When I open the QR code "Test_Process1_OrderQR.png" of "OrderQR"
+	Then the Workstation ID "Test_Line_Workstation2" and Name "Test_Line_Workstation2" should be displayed at the top of the application
+
+
+Scenario: Raising the issues with the device
+ 	When I navigate to the Website "https://app-order-tracker-eus-tst.azurewebsites.net/"
+	When I open the QR code "Test_Line_Workstation1_Test_Line1.png" of "WorkStationQR"
+	And I open Camera to scan QR Code
+	When I open the QR code "Test_Process1_OrderQR.png" of "OrderQR"
+	And I open Camera to scan QR Code
+	#When The issues "Device Feedback", "Device Dead", "Vent Broken" are selected
+
+
+Scenario Outline: Raising issues across the workstations
+	When I navigate to the Website "https://app-order-tracker-eus-tst.azurewebsites.net/"
+	When I open the QR code "<WorkstationQR>" of "WorkStationQR"
+	And I open Camera to scan QR Code
+	When I open the QR code "<OrderQR>" of "OrderQR"
+	And I open Camera to scan QR Code
+	#When The issues "Device Feedback", "Device Dead", "Vent Broken" are selected
+	Examples: 
+	| WorkstationQR                         | OrderQR                   |
+	| Test_Line_Workstation1_Test_Line1.png | Test_Process1_OrderQR.png |
+	| Test_Line_Workstation2_Test_Line1.png | Test_Process2_OrderQR.png |
+	| Test_Line_Workstation3_Test_Line1.png | Test_Process3_OrderQR.png |
+	| Test_Line_Workstation4_Test_Line1.png | Test_Process4_OrderQR.png |
+
+Scenario: Raising issues with device
+ 	When I navigate to the Website "https://app-order-tracker-eus-tst.azurewebsites.net/"
+	When I open the QR code "Test_Line_Workstation1_Test_Line1.png" of "WorkStationQR"
+	And I open Camera to scan QR Code
+	When I open the QR code "Test_Process1_OrderQR.png" of "OrderQR"
+	And I open Camera to scan QR Code
+	When With serial number "2027888802" the issues "Device Feedback", "Device Dead", "Vent Broken" are selected 
+
+
+Scenario: Reworking on the devices with the issues
+ 	When I navigate to the Website "https://app-order-tracker-eus-tst.azurewebsites.net/"
+	When I open the QR code "Test_Line_Workstation1_Test_Line1.png" of "WorkStationQR"
+	And I open Camera to scan QR Code
+	When I open the QR code "Test_Process1_OrderQR.png" of "OrderQR"
+	And I open Camera to scan QR Code
+	When With serial number "2027888802" the issues "Device Feedback", "Device Dead", "Vent Broken" are selected 
+	And I open Camera to scan QR Code
+	When I rework on the device "2027888802" with the options "Change Hybrid", "Change Push Button", "Repair Seam"
+	When I select "Select root causes" with the options "Dead Component", "Bad Workmanship", "Operator Error"
+	When I select "Select fault areas" with the options "Shell", "Lacquer", "Housing"

@@ -83,7 +83,6 @@ namespace PlaywrightDemo.Hooks
         [AfterScenario]
         public async Task AfterScenario()
         {
-            //await _context.CloseAsync();
             _playwright?.Dispose();
         }
     }
