@@ -370,6 +370,7 @@ namespace PlaywrightDemo.Pages
             await reportButton.ClickAsync();
             await WaitAsync();
             await Page.GetByText("Complete Step").ClickAsync();
+            await WaitAsync();
         }
         public async Task SelectingReworkOptions(string serialno, params string[] steps)
         {

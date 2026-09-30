@@ -22,12 +22,16 @@ namespace PlaywrightDemo.Hooks
         {
             _container = container;
         }
-
+        [BeforeTestRun]
+        public static void BeforeTestRun()
+        {
+            ExtentReportManager.StartReport();
+        }
         [BeforeScenario]
         public async Task Setup(ScenarioContext scenarioContext)
         {
             Instance = this;
-            ExtentReportManager.StartReport();
+           
             // Create scenario in Extent
             ExtentReportManager.CreateScenario(scenarioContext.ScenarioInfo.Title);
 
@@ -138,10 +142,6 @@ namespace PlaywrightDemo.Hooks
                     ExtentReportManager.Pass(
                         "Scenario Passed");
                 }
-
-                ExtentReportManager.Flush();
-
-                ExtentReportManager.OpenReport();
             }
             finally
             {
@@ -152,6 +152,13 @@ namespace PlaywrightDemo.Hooks
                 Page = null;
                 Instance = null;
             }
+        }
+        [AfterTestRun]
+        public static void AfterTestRun()
+        {
+            ExtentReportManager.Flush();
+
+            ExtentReportManager.OpenReport();
         }
 
         [AfterStep]
@@ -171,5 +178,8 @@ namespace PlaywrightDemo.Hooks
                     $"{step.StepDefinitionType} {step.Text}");
             }
         }
+
+       
+
     }
 }
