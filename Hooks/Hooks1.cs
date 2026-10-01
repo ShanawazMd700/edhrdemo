@@ -22,18 +22,46 @@ namespace PlaywrightDemo.Hooks
         {
             _container = container;
         }
+
+        // =========================================================
+        // BEFORE TEST RUN
+        // =========================================================
+
         [BeforeTestRun]
         public static void BeforeTestRun()
         {
             ExtentReportManager.StartReport();
         }
+
+
+        // =========================================================
+        // BEFORE SCENARIO
+        // =========================================================
+
         [BeforeScenario]
-        public async Task Setup(ScenarioContext scenarioContext)
+        public async Task Setup(
+            ScenarioContext scenarioContext,
+            FeatureContext featureContext)
         {
             Instance = this;
-           
-            // Create scenario in Extent
-            ExtentReportManager.CreateScenario(scenarioContext.ScenarioInfo.Title);
+
+            // -----------------------------------------------------
+            // Get Feature and Scenario names
+            // -----------------------------------------------------
+
+            string featureName =
+                featureContext.FeatureInfo.Title;
+
+            string scenarioName =
+                scenarioContext.ScenarioInfo.Title;
+
+            // -----------------------------------------------------
+            // Create Scenario under Feature
+            // -----------------------------------------------------
+
+            ExtentReportManager.CreateScenario(
+                featureName,
+                scenarioName);
 
             // ------------------------------------------------
             // Playwright setup
@@ -117,10 +145,36 @@ namespace PlaywrightDemo.Hooks
                         }
                 });
 
+            // ------------------------------------------------
+            // Register Page with Reqnroll
+            // ------------------------------------------------
+
             _container.RegisterInstanceAs<IPage>(Page);
 
             ExtentReportManager.Pass(
                 "Playwright browser initialized.");
+        }
+        [AfterStep]
+        public void AfterStep(
+            ScenarioContext scenarioContext)
+        {
+            var step =
+                scenarioContext.StepContext.StepInfo;
+
+            string stepName =
+                $"{step.StepDefinitionType} {step.Text}";
+
+            if (scenarioContext.TestError != null)
+            {
+                ExtentReportManager.FailStep(
+                    stepName,
+                    scenarioContext.TestError);
+            }
+            else
+            {
+                ExtentReportManager.PassStep(
+                    stepName);
+            }
         }
 
         [AfterScenario]
@@ -153,6 +207,7 @@ namespace PlaywrightDemo.Hooks
                 Instance = null;
             }
         }
+
         [AfterTestRun]
         public static void AfterTestRun()
         {
@@ -160,26 +215,5 @@ namespace PlaywrightDemo.Hooks
 
             ExtentReportManager.OpenReport();
         }
-
-        [AfterStep]
-        public void AfterStep(ScenarioContext scenarioContext)
-        {
-            var step = scenarioContext.StepContext.StepInfo;
-
-            if (scenarioContext.TestError != null)
-            {
-                ExtentReportManager.FailStep(
-                    $"{step.StepDefinitionType} {step.Text}",
-                    scenarioContext.TestError);
-            }
-            else
-            {
-                ExtentReportManager.PassStep(
-                    $"{step.StepDefinitionType} {step.Text}");
-            }
-        }
-
-       
-
     }
 }
