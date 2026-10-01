@@ -357,7 +357,12 @@ namespace PlaywrightDemo.Pages
         {
             await Page.SelectDevice().SelectOptionAsync(deviceName);
         }
-        
+        public async Task ClickCompleteStep()
+        {
+            await WaitAsync();
+            await Page.GetByText("Complete Steps").ClickAsync();
+            await WaitAsync();
+        }
         public async Task RaiseIssue1(string serialno, params string[] issues)
         {
             await Page.GetByText("Report Failure").ClickAsync();
@@ -368,9 +373,9 @@ namespace PlaywrightDemo.Pages
             }
             var reportButton = Page.ReportErrorandKeep();
             await reportButton.ClickAsync();
-            await WaitAsync();
-            await Page.GetByText("Complete Step").ClickAsync();
-            await WaitAsync();
+            //await WaitAsync();
+            //await Page.GetByText("Complete Step").ClickAsync();
+            //await WaitAsync();
         }
         public async Task SelectingReworkOptions(string serialno, params string[] steps)
         {
@@ -409,13 +414,16 @@ namespace PlaywrightDemo.Pages
                 await Page.DeviceIssueOption(option).ClickAsync();
             }
             await WaitAsync();
-            if(reworkcount == 2)
+            if (reworkcount % 2 == 0)
             {
                 await Page.GetByText("Report rework").ClickAsync();
-                await Page.GetByText("Complete Step").ClickAsync();
             }
             await WaitAsync();
-           
+        }
+
+        public async Task SelectProcessSteps(string processStep)
+        {
+            await Page.SelectProcessStep().SelectOptionAsync(processStep);
         }
     }
 }

@@ -153,6 +153,17 @@ namespace PlaywrightDemo.StepDefinitions
         {
             await adminPage.SelectRootCausesAndFaultAreas(tab, option1, option2, option3);
         }
+        [When("I select the Process Step {string}")]
+        public async Task WhenISelectTheProcessStep(string processStep)
+        {
+            await adminPage.SelectProcessSteps(processStep);
+        }
+
+        [When("I Click Complete Step")]
+        public async Task WhenIClickCompleteStep()
+        {
+            await adminPage.ClickCompleteStep();
+        }
 
 
     }

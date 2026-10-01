@@ -279,5 +279,8 @@ namespace PlaywrightDemo.Locators
         })
         .GetByRole(AriaRole.Button, new() { Name = "Rework" });
 
+            public static ILocator SelectProcessStep(this IPage page) =>
+                page.Locator("div.border-action-group select.action-button.button-tab");
+
     }
 }
