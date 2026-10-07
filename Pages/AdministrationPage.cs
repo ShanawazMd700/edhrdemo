@@ -360,7 +360,7 @@ namespace PlaywrightDemo.Pages
         public async Task ClickCompleteStep()
         {
             await WaitAsync();
-            await Page.GetByText("Complete Steps").ClickAsync();
+            await Page.GetByText("Complete Step").ClickAsync();
             await WaitAsync();
         }
         public async Task RaiseIssue1(string serialno, params string[] issues)
@@ -373,9 +373,7 @@ namespace PlaywrightDemo.Pages
             }
             var reportButton = Page.ReportErrorandKeep();
             await reportButton.ClickAsync();
-            //await WaitAsync();
-            //await Page.GetByText("Complete Step").ClickAsync();
-            //await WaitAsync();
+
         }
         public async Task SelectingReworkOptions(string serialno, params string[] steps)
         {
@@ -394,16 +392,7 @@ namespace PlaywrightDemo.Pages
                 await Page.DeviceIssueOption(cause).ClickAsync();
             }
         }
-        public async Task SelectFaultAreas(params string[] faults)
-        {
-            await Page.GetByText("Select fault areass").ClickAsync();
-            foreach(var fault in faults)
-            {
-                await Page.DeviceIssueOption(fault).ClickAsync();
-            }
-            await WaitAsync();
-            await Page.GetByText("Report rework").ClickAsync();
-        }
+
         private int reworkcount = 0;
         public async Task SelectRootCausesAndFaultAreas(string tab, params string[] options)
         {
@@ -423,7 +412,52 @@ namespace PlaywrightDemo.Pages
 
         public async Task SelectProcessSteps(string processStep)
         {
-            await Page.SelectProcessStep().SelectOptionAsync(processStep);
+            var dropdown = Page.SelectProcessStep();
+
+            var options = await dropdown.Locator("option").AllTextContentsAsync();
+
+            await dropdown.SelectOptionAsync(processStep);
+        }
+        public async Task RaiseRandomIssues(string serialno, int numberOfIssues)
+        {
+            await Page.GetByText("Report Failure").ClickAsync();
+
+            await SelectDevice(serialno);
+
+            var issues = Page.DeviceIssues();
+
+            int issueCount = await issues.CountAsync();
+
+            if (issueCount == 0)
+                throw new InvalidOperationException("No issues were found.");
+
+            if (numberOfIssues > issueCount)
+                throw new ArgumentException(
+                    $"Requested {numberOfIssues} issues, but only {issueCount} issues are available.");
+
+            // Create random indexes
+            var randomIndexes = Enumerable
+                .Range(0, issueCount)
+                .OrderBy(_ => Random.Shared.Next())
+                .Take(numberOfIssues)
+                .ToList();
+
+            foreach (var index in randomIndexes)
+            {
+                var issue = issues.Nth(index);
+
+                await issue.ScrollIntoViewIfNeededAsync();
+
+                var issueName = (await issue.InnerTextAsync()).Trim();
+
+                Console.WriteLine($"Selecting random issue: {issueName}");
+
+                await issue.ClickAsync();
+            }
+
+            var reportButton = Page.ReportErrorandKeep();
+
+            await reportButton.ClickAsync();
         }
     }
 }

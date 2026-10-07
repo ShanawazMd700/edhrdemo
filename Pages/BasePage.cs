@@ -1,6 +1,9 @@
 using Microsoft.Playwright;
+using PlaywrightDemo.Hooks;
+using PlaywrightDemo.ReportManagers;
 using System;
 using System.Text.Json;
+using PlaywrightDemo.ReportManagers;
 using System.Threading.Tasks;
 
 namespace PlaywrightDemo.Pages
@@ -253,6 +256,27 @@ namespace PlaywrightDemo.Pages
                     }
                 });
         }
+        private async Task PassScreenshotAsync(string message)
+        {
+            var trackingPage =
+                Hooks1.Instance!.GetTrackingPage();
+
+            await ExtentReportManager.PassWithScreenshotAsync(
+                message,
+                trackingPage,
+                message);
+        }
+        private async Task FailScreenshotAsync(string message)
+        {
+            var trackingPage =
+                Hooks1.Instance!.GetTrackingPage();
+
+            await ExtentReportManager.FailWithScreenshotAsync(
+                message,
+                trackingPage,
+                message);
+        }
+
 
     }
 }

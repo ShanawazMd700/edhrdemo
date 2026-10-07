@@ -282,5 +282,8 @@ namespace PlaywrightDemo.Locators
             public static ILocator SelectProcessStep(this IPage page) =>
                 page.Locator("div.border-action-group select.action-button.button-tab");
 
+        public static ILocator DeviceIssues(this IPage page) =>
+        page.Locator("div.visible.optionlist.optionbox > div.optionbox-option.optionbox-content");
+
     }
 }

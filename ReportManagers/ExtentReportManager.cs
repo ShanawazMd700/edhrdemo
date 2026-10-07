@@ -183,76 +183,84 @@ namespace PlaywrightDemo.ReportManagers
         // STEP FAIL
         // =========================================================
 
-        public static void FailStep(
-            string step,
-            Exception exception)
+        public static async Task FailStepAsync(
+     string step,
+     Exception exception,
+     IPage page,
+     string scenarioName)
         {
-            _scenario?
-                .Fail(step)
-                .Fail(exception);
+            if (_scenario == null)
+                return;
+
+            try
+            {
+                string safeScenarioName =
+                    SanitizeFileName(scenarioName);
+
+                string safeStepName =
+                    SanitizeFileName(step);
+
+                string timestamp =
+                    DateTime.Now.ToString("HH-mm-ss-fff");
+
+                string screenshotPath =
+                    Path.Combine(
+                        _screenshotDirectory!,
+                        $"{safeScenarioName}_{safeStepName}_{timestamp}.png");
+                await page.BringToFrontAsync();
+
+
+                await page.ScreenshotAsync(
+                    new PageScreenshotOptions
+                    {
+                        Path = screenshotPath,
+                        FullPage = false,
+                        Animations = ScreenshotAnimations.Disabled
+                    });
+
+
+                if (!File.Exists(screenshotPath))
+                {
+                    _scenario
+                        .Fail(step)
+                        .Fail(exception)
+                        .Info(
+                            "Screenshot file was not created.");
+
+                    return;
+                }
+
+                var fileInfo =
+                    new FileInfo(screenshotPath);
+
+                Console.WriteLine(
+                    $"Screenshot size: {fileInfo.Length} bytes");
+
+                _scenario
+                    .Fail(step)
+                    .Fail(exception)
+                    .AddScreenCaptureFromPath(
+                        Path.GetFullPath(screenshotPath));
+            }
+            catch (Exception screenshotException)
+            {
+                _scenario
+                    .Fail(step)
+                    .Fail(exception)
+                    .Info(
+                        $"Could not capture failure screenshot: " +
+                        screenshotException.Message);
+            }
         }
-
-
-        // =========================================================
-        // LOG STEP
-        // =========================================================
-
         public static void LogStep(
             string message)
         {
             _scenario?.Info(message);
         }
-
-
-        // =========================================================
-        // SCREENSHOT
-        // =========================================================
-
-        public static async Task AddScreenshotAsync(
-            IPage page,
-            string scenarioName)
-        {
-            if (_screenshotDirectory == null ||
-                _scenario == null)
-            {
-                return;
-            }
-
-            string safeScenarioName =
-                SanitizeFileName(
-                    scenarioName);
-
-            string screenshotPath =
-                Path.Combine(
-                    _screenshotDirectory,
-                    $"{safeScenarioName}.png");
-
-            await page.ScreenshotAsync(
-                new PageScreenshotOptions
-                {
-                    Path = screenshotPath,
-                    FullPage = true
-                });
-
-            _scenario.AddScreenCaptureFromPath(
-                screenshotPath);
-        }
-
-
-        // =========================================================
-        // FLUSH
-        // =========================================================
-
         public static void Flush()
         {
             _extent?.Flush();
         }
-
-
-        // =========================================================
-        // OPEN REPORT
-        // =========================================================
-
         public static void OpenReport()
         {
             if (string.IsNullOrWhiteSpace(
@@ -274,12 +282,6 @@ namespace PlaywrightDemo.ReportManagers
                     UseShellExecute = true
                 });
         }
-
-
-        // =========================================================
-        // SANITIZE FILE NAME
-        // =========================================================
-
         private static string SanitizeFileName(
             string fileName)
         {
@@ -294,12 +296,6 @@ namespace PlaywrightDemo.ReportManagers
 
             return fileName;
         }
-
-
-        // =========================================================
-        // CLEAR
-        // =========================================================
-
         public static void Clear()
         {
             _features.Clear();
@@ -308,5 +304,88 @@ namespace PlaywrightDemo.ReportManagers
 
             _extent = null;
         }
+        public static async Task PassWithScreenshotAsync(
+    string message,
+    IPage page,
+    string screenshotName)
+        {
+            if (_scenario == null)
+                return;
+
+            try
+            {
+                string safeName =
+                    SanitizeFileName(screenshotName);
+
+                string timestamp =
+                    DateTime.Now.ToString("HH-mm-ss-fff");
+
+                string screenshotPath =
+                    Path.Combine(
+                        _screenshotDirectory!,
+                        $"{safeName}_{timestamp}.png");
+
+                await page.ScreenshotAsync(
+                    new PageScreenshotOptions
+                    {
+                        Path = screenshotPath,
+                        FullPage = true
+                    });
+
+                _scenario
+                    .Pass(message)
+                    .AddScreenCaptureFromPath(
+                        Path.GetFullPath(screenshotPath));
+            }
+            catch (Exception ex)
+            {
+                _scenario
+                    .Pass(message)
+                    .Info(
+                        $"Could not capture screenshot: {ex.Message}");
+            }
+        }
+        public static async Task FailWithScreenshotAsync(
+    string message,
+    IPage page,
+    string screenshotName)
+        {
+            if (_scenario == null)
+                return;
+
+            try
+            {
+                string safeName =
+                    SanitizeFileName(screenshotName);
+
+                string timestamp =
+                    DateTime.Now.ToString("HH-mm-ss-fff");
+
+                string screenshotPath =
+                    Path.Combine(
+                        _screenshotDirectory!,
+                        $"{safeName}_{timestamp}.png");
+
+                await page.ScreenshotAsync(
+                    new PageScreenshotOptions
+                    {
+                        Path = screenshotPath,
+                        FullPage = true
+                    });
+
+                _scenario
+                    .Fail(message)
+                    .AddScreenCaptureFromPath(
+                        Path.GetFullPath(screenshotPath));
+            }
+            catch (Exception ex)
+            {
+                _scenario
+                    .Fail(message)
+                    .Info(
+                        $"Could not capture screenshot: {ex.Message}");
+            }
+        }
+
     }
 }

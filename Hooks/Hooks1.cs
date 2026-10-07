@@ -98,13 +98,25 @@ namespace PlaywrightDemo.Hooks
                 ?? throw new InvalidOperationException(
                     "Browser context could not be created.");
 
-            var page = _context.Pages.Count > 0
-                ? _context.Pages[0]
-                : await _context.NewPageAsync();
+            IPage page;
 
-            Page = page
-                ?? throw new InvalidOperationException(
-                    "Browser page could not be created.");
+            var existingPage = _context.Pages.FirstOrDefault(p =>
+                !string.Equals(
+                    p.Url,
+                    "about:blank",
+                    StringComparison.OrdinalIgnoreCase));
+
+            if (existingPage != null)
+            {
+                page = existingPage;
+            }
+            else
+            {
+                page = _context.Pages.FirstOrDefault()
+                    ?? await _context.NewPageAsync();
+            }
+
+            Page = page;
 
             // ------------------------------------------------
             // Maximize Edge
@@ -155,8 +167,8 @@ namespace PlaywrightDemo.Hooks
                 "Playwright browser initialized.");
         }
         [AfterStep]
-        public void AfterStep(
-            ScenarioContext scenarioContext)
+        public async Task AfterStep(
+             ScenarioContext scenarioContext)
         {
             var step =
                 scenarioContext.StepContext.StepInfo;
@@ -166,32 +178,39 @@ namespace PlaywrightDemo.Hooks
 
             if (scenarioContext.TestError != null)
             {
-                ExtentReportManager.FailStep(
-                    stepName,
-                    scenarioContext.TestError);
+                try
+                {
+                    IPage trackingPage = GetTrackingPage();
+
+                    await trackingPage.BringToFrontAsync();
+
+                    await ExtentReportManager.FailStepAsync(
+                        stepName,
+                        scenarioContext.TestError,
+                        trackingPage,
+                        scenarioContext.ScenarioInfo.Title);
+                }
+                catch (Exception ex)
+                {
+                    ExtentReportManager.Fail(
+                        $"Failed to capture screenshot for step: {stepName}");
+
+                    ExtentReportManager.Fail(ex);
+                }
             }
             else
             {
-                ExtentReportManager.PassStep(
-                    stepName);
+                ExtentReportManager.PassStep(stepName);
             }
         }
 
         [AfterScenario]
         public async Task AfterScenario(
-            ScenarioContext scenarioContext)
+    ScenarioContext scenarioContext)
         {
             try
             {
-                if (scenarioContext.TestError != null)
-                {
-                    ExtentReportManager.Fail(
-                        "Scenario Failed");
-
-                    ExtentReportManager.Fail(
-                        scenarioContext.TestError);
-                }
-                else
+                if (scenarioContext.TestError == null)
                 {
                     ExtentReportManager.Pass(
                         "Scenario Passed");
@@ -207,7 +226,28 @@ namespace PlaywrightDemo.Hooks
                 Instance = null;
             }
         }
+        public IPage GetTrackingPage()
+        {
+            if (_context == null)
+            {
+                throw new InvalidOperationException(
+                    "Browser context is not available.");
+            }
 
+            var trackingPage = _context.Pages.FirstOrDefault(p =>
+                p.Url.Contains(
+                    "/tracking",
+                    StringComparison.OrdinalIgnoreCase));
+
+            if (trackingPage != null)
+            {
+                Page = trackingPage;
+                return trackingPage;
+            }
+
+            throw new InvalidOperationException(
+                "Tracking page was not found.");
+        }
         [AfterTestRun]
         public static void AfterTestRun()
         {

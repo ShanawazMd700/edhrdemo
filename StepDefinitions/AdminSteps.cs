@@ -164,6 +164,11 @@ namespace PlaywrightDemo.StepDefinitions
         {
             await adminPage.ClickCompleteStep();
         }
+        [When("With serial number {string} {int} random issues are selected")]
+        public async Task WhenWithSerialNumberRandomIssuesAreSelected(string sno, int random)
+        {
+            await adminPage.RaiseRandomIssues(sno, random);
+        }
 
 
     }

@@ -168,3 +168,49 @@ Scenario: Reworking on the device with various Process Steps
 	When I select "Select root causes" with the options "Dead Component", "Bad Workmanship", "Operator Error"
 	When I select "Select fault areas" with the options "Shell", "Lacquer", "Housing"
 	When I Click Complete Step
+
+
+Scenario Outline: Raising issues and reworking on the devices with the issues across the workstations
+	When I navigate to the Website "https://app-order-tracker-eus-tst.azurewebsites.net/"
+	And I open the QR code "<WorkstationQR>" of "WorkStationQR"
+	And I open Camera to scan QR Code
+	And I open the QR code "<OrderQR>" of "OrderQR"
+	And I open Camera to scan QR Code
+	When I select the Process Step "<ProcessStep>"
+	And With serial number "2027888802" the issues "Device Feedback", "Device Dead", "Vent Broken" are selected
+	And I Click Complete Step
+	And I open Camera to scan QR Code
+	When I select the Process Step "<ProcessStep>"
+	And I rework on the device "2027888802" with the options "Change Hybrid", "Change Push Button", "Repair Seam"
+	And I select "Select root causes" with the options "Dead Component", "Bad Workmanship", "Operator Error"
+	And I select "Select fault areas" with the options "Shell", "Lacquer", "Housing"
+	And I Click Complete Step
+Examples:
+	| WorkstationQR                         | OrderQR                   | ProcessStep         |
+	| Test_Line_Workstation1_Test_Line1.png | Test_Process1_OrderQR.png | Test_Process1_Step1 |
+	| Test_Line_Workstation2_Test_Line1.png | Test_Process1_OrderQR.png | Test_Process1_Step2 |
+	| Test_Line_Workstation3_Test_Line1.png | Test_Process1_OrderQR.png | Test_Process1_Step3 |
+	| Test_Line_Workstation4_Test_Line1.png | Test_Process1_OrderQR.png | Test_Process1_Step4 |
+
+
+Scenario Outline: Raising issues and reworking on the devices with random issues across the workstations
+	When I navigate to the Website "https://app-order-tracker-eus-tst.azurewebsites.net/"
+	And I open the QR code "<WorkstationQR>" of "WorkStationQR"
+	And I open Camera to scan QR Code
+	And I open the QR code "<OrderQR>" of "OrderQR"
+	And I open Camera to scan QR Code
+	When I select the Process Step "<ProcessStep>"
+	And With serial number "2027888802" 3 random issues are selected
+	And I Click Complete Step
+	And I open Camera to scan QR Code
+	When I select the Process Step "<ProcessStep>"
+	And I rework on the device "2027888802" with the options "Change Hybrid", "Change Push Button", "Repair Seam"
+	And I select "Select root causes" with the options "Dead Component", "Bad Workmanship", "Operator Error"
+	And I select "Select fault areas" with the options "Shell", "Lacquer", "Housing"
+	And I Click Complete Step
+Examples:
+	| WorkstationQR                         | OrderQR                   | ProcessStep         |
+	| Test_Line_Workstation1_Test_Line1.png | Test_Process1_OrderQR.png | Test_Process1_Step1 |
+	| Test_Line_Workstation2_Test_Line1.png | Test_Process1_OrderQR.png | Test_Process1_Step2 |
+	| Test_Line_Workstation3_Test_Line1.png | Test_Process1_OrderQR.png | Test_Process1_Step3 |
+	| Test_Line_Workstation4_Test_Line1.png | Test_Process1_OrderQR.png | Test_Process1_Step4 |
