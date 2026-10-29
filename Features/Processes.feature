@@ -6,37 +6,45 @@ Given I navigate to administration
 
 
 Scenario: Creating Process Steps
+	Given I navigate to administration
 	When I add Process with the name "Process_237"
 	And I add Process Steps with the Step Names "Process_237.Step1", "Process_237.Step2", "Process_237.Step3" to the Process "Process_237"
 	
 
 Scenario: D_Adding the Process Steps to the Process
+	Given I navigate to administration
 	When I add Process Steps with the Step Names "Process_234.Step4", "Process_234.Step5", "Process_234.Step6" to the Process "Process_234"
 
 Scenario: Creating the Users in User Group
+Given I navigate to administration
   Given I add a UserGroup "UserGroup_100"
 
 
 Scenario: Adding Users to the User Group
+	Given I navigate to administration
 	When I navigate to the "User Groups" tab
 	When I add Users with the User Names "amaganti@gnhearing.com", "xxsurko@gnhearing.com", "ppuvvala@gnhearing.com" to the UserGroup "UserGroup_100"
 
 Scenario: Creating Lines
+	Given I navigate to administration
 	When I navigate to the "Lines" tab
 	When I Create line with the name "Line_100"
 
 
 Scenario: Adding process steps to the Lines
+	Given I navigate to administration
 	When I navigate to the "Lines" tab
 	When I select Line "Line_100" and click on Workstation "WorkStation_100"
 	When I add Process Steps "Process_234.Step4", "Process_234.Step5", "Process_234.Step6"
 
 Scenario: Adding Users to the WorkStations
+	Given I navigate to administration
 	When I navigate to the "Lines" tab
 	And I select Line "Line_100" and click on Workstation "WorkStation_100"
 	And I add User Group "UserGroup_100"
 
 Scenario: Adding Assets to the Processes
+	Given I navigate to administration
 	When I navigate to the "Lines" tab
 	When I select Line "Line_100" and click on Workstation "WorkStation_100"
 	When I add an Asset with details
@@ -45,7 +53,10 @@ Scenario: Adding Assets to the Processes
 
 
 Scenario Outline: Adding processes When based on the Configuration steps
+	Given I navigate to administration
     When I Create Processes based on the Configuration conditions '<condition>'
+    And I download the process JSON for configuration '<condition>' from Blob
+    Then the downloaded process JSON should match configuration '<condition>'
 
 Examples:
     | condition                          |
@@ -155,6 +166,10 @@ Scenario: Reworking on the device with various Process Steps
 	When With serial number "2027888801" the issues "Device Feedback", "Device Dead", "Vent Broken" are selected
 	When I select the Process Step "Test_Process1_Step2"
 	When With serial number "2027888802" the issues "Device Feedback", "Device Dead", "Vent Broken" are selected
+	When I select the Process Step "Test_Process1_Step3"
+	When With serial number "2027888801" the issues "Device Feedback", "Device Dead", "Vent Broken" are selected
+	When I select the Process Step "Test_Process1_Step4"
+	When With serial number "2027888802" the issues "Device Feedback", "Device Dead", "Vent Broken" are selected
 	When I Click Complete Step
 	When I reload the page
 	When I open the QR code "Test_Line_Workstation2_Test_Line1.png" of "WorkStationQR"
@@ -168,6 +183,7 @@ Scenario: Reworking on the device with various Process Steps
 	When I select "Select root causes" with the options "Dead Component", "Bad Workmanship", "Operator Error"
 	When I select "Select fault areas" with the options "Shell", "Lacquer", "Housing"
 	When I Click Complete Step
+
 
 
 Scenario Outline: Raising issues and reworking on the devices with the issues across the workstations
@@ -214,3 +230,9 @@ Examples:
 	| Test_Line_Workstation2_Test_Line1.png | Test_Process1_OrderQR.png | Test_Process1_Step2 |
 	| Test_Line_Workstation3_Test_Line1.png | Test_Process1_OrderQR.png | Test_Process1_Step3 |
 	| Test_Line_Workstation4_Test_Line1.png | Test_Process1_OrderQR.png | Test_Process1_Step4 |
+
+Scenario: Working with RSA Encryption
+When I Encrypt the API key
+
+Scenario: Working with RSA Decryption
+	When I Decrypt the API key

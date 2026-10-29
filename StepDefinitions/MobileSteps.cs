@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using MobileAppium.Actions;
 using MobileAppium.Drivers;
+using KeyEncryption;
 
 namespace PlaywrightDemo.StepDefinitions
 {
@@ -30,5 +31,18 @@ namespace PlaywrightDemo.StepDefinitions
         {
             _mobileActions.SelectQrCode1(qrcode, folderName);
         }
+        [When("I Encrypt the API key")]
+        public void WhenIEncryptTheAPIKey()
+        {
+            RsaPoc.GenerateRsaKeys();
+            RsaPoc.EncryptJsonBinKey();
+        }
+        [When("I Decrypt the API key")]
+        public void WhenIDecryptTheAPIKey()
+        {
+           RsaPoc.DecryptJsonBinKey();
+        }
+
+
     }
 }

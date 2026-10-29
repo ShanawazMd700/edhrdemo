@@ -3,6 +3,8 @@ using System.Globalization;
 using Microsoft.Playwright;
 using PlaywrightDemo.Locators;
 using PlaywrightDemo.Support;
+using PlaywrightDemo.AzureServices;
+using Azure.Storage.Blobs.Models;
 
 namespace PlaywrightDemo.Pages
 {
@@ -15,13 +17,7 @@ namespace PlaywrightDemo.Pages
         {
             //_process = new Process(page);
         }
-        private async Task ScrollAndSelectAsync(string processName)
-        {
-            await WaitAsync();
-            await ScrollToProcessAsync(processName);
-            var processRow = Page.GetProcessRow(processName);
-            await processRow.ClickAsync();
-        }
+
         public async Task GoToAsync()
         {
             await Page.GotoAsync(AdministrationUrl);
@@ -30,6 +26,7 @@ namespace PlaywrightDemo.Pages
 
         public async Task ClickAddProcessAsync(string processName, string displayName)
         {
+            await Page.AddButton(0).ClickAsync();
             await Page.AddButton(0).ClickAsync();
             await Page.ProcessEditorField(0).FillAsync(processName);
             await Page.ProcessEditorField(1).FillAsync(displayName); ////Process Creation
@@ -215,7 +212,6 @@ namespace PlaywrightDemo.Pages
             await Page.SaveOrCheckButton().ClickAsync();
             await SaveLinesProcess(linename); // Save/Publish after this addition
         }
-
         public async Task CreateConfigurationAsync(string configurationName)
         {
             var configuration = AdminAccessConfigurationLoader.LoadProcessConfiguration(configurationName);
@@ -270,6 +266,35 @@ namespace PlaywrightDemo.Pages
                         DateTime.ParseExact(asset.ExpirationDate, "dd-MM-yyyy", CultureInfo.InvariantCulture));
                 }
             }
+        }
+
+        public async Task<string> DownloadProcessJsonAsync(string configurationName)
+        {
+            var configuration = AdminAccessConfigurationLoader.LoadProcessConfiguration(configurationName);
+            var downloadFileName = configuration.ProcessCreation.Name + ".json";
+            _blob = new AzureBlobStorageService();
+
+            return await _blob.DownloadFileAsync(downloadFileName);
+        }
+        public async Task<string> DownloadLineJsonAsync(string configurationName)
+        {
+            var configuration = AdminAccessConfigurationLoader.LoadProcessConfiguration(configurationName);
+            var downloadFileName = configuration.LineCreation.Name + ".json";
+            _blob = new AzureBlobStorageService();
+            return await _blob.DownloadFileAsync(downloadFileName);
+        }
+        public async Task<string> DownloadUserGroupJsonAsync(string configurationName)
+        {
+            var configuration = AdminAccessConfigurationLoader.LoadProcessConfiguration(configurationName);
+            var downloadFileName = configuration.UserGroups.Name + ".json";                                          //.UserGroupCreation.Name + ".json";
+            _blob = new AzureBlobStorageService();
+            return await _blob.DownloadFileAsync(downloadFileName);
+        }
+
+        public void VerifyDownloadedProcessJson(string configurationName, string downloadedFilePath)
+        {
+            var configuration = AdminAccessConfigurationLoader.LoadProcessConfiguration(configurationName);
+            ProcessJsonVerifier.Verify(downloadedFilePath, configuration.ProcessCreation);
         }
 
         public async Task NavigatingToAnotherTab(string tabname)
@@ -394,6 +419,8 @@ namespace PlaywrightDemo.Pages
         }
 
         private int reworkcount = 0;
+        private AzureBlobStorageService _blob;
+
         public async Task SelectRootCausesAndFaultAreas(string tab, params string[] options)
         {
             reworkcount++;

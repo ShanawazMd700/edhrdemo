@@ -15,6 +15,7 @@ namespace PlaywrightDemo.StepDefinitions
         private readonly WorkStationPage workStationPage;
   
         private string? selectedLineName;
+        private string? downloadedProcessJsonPath;
         public AdminSteps()
         {
             var page = Hooks1.Instance?.Page;
@@ -115,6 +116,23 @@ namespace PlaywrightDemo.StepDefinitions
         public async Task WhenICreateProcessesBasedOnTheConfigurationConditionsAsync(string condition)
         {
             await adminPage.CreateConfigurationAsync(condition);
+        }
+
+        [When("I download the process JSON for configuration {string} from Blob")]
+        public async Task WhenIDownloadTheProcessJsonForConfigurationFromBlob(string condition)
+        {
+            downloadedProcessJsonPath = await adminPage.DownloadProcessJsonAsync(condition);
+        }
+
+        [Then("the downloaded process JSON should match configuration {string}")]
+        public void ThenTheDownloadedProcessJsonShouldMatchConfiguration(string condition)
+        {
+            if (string.IsNullOrWhiteSpace(downloadedProcessJsonPath))
+            {
+                throw new InvalidOperationException("Download the process JSON before verifying it.");
+            }
+
+            adminPage.VerifyDownloadedProcessJson(condition, downloadedProcessJsonPath);
         }
 
         [When("I navigate to the Website {string}")]
